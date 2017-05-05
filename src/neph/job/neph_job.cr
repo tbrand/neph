@@ -20,7 +20,7 @@ module Neph
     def progress_bar : String
       percent_bar = ("|" * (progress_percent/2)).colorize.fore(:green)
       percent_bar_empty = ("|" * (50-progress_percent/2)).colorize.fore(:dark_gray)
-      " #{percent_bar}#{percent_bar_empty}"
+      "#{percent_bar}#{percent_bar_empty}"
     end
 
     # Override
@@ -29,7 +29,7 @@ module Neph
     end
 
     def top_banner
-      "Neph".colorize.fore(:green).mode(:bold).to_s+ " (#{VERSION})"
+      "Running neph".colorize.fore(:green).mode(:bold).to_s+ " (#{VERSION})"
     end
 
     def fin

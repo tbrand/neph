@@ -17,7 +17,8 @@ git clone https://github.com/tbrand/neph
 
 Compile
 ```bash
-cd neph; shards build
+> cd neph
+> shards build --release
 ```
 
 Now executable binary is at `neph/bin/neph`.

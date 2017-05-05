@@ -5,6 +5,8 @@ module Neph
     DONE    = 2
     ERROR   = 3
 
+    TICK_CHARS = "⠁⠁⠉⠙⠚⠒⠂⠂⠒⠲⠴⠤⠄⠄⠤⠠⠠⠤⠦⠖⠒⠐⠐⠒⠓⠋⠉⠈⠈ "
+
     getter name         : String
     getter command      : String
     getter log_dir      : String
@@ -29,38 +31,28 @@ module Neph
     end
 
     def get_progress : String
-      progress = if @step%4 == 0
-                   "\\"
-                 elsif @step%4 == 1
-                   "--"
-                 elsif @step%4 == 2
-                   "/"
-                 else
-                   "|"
-                 end
-
+      progress = TICK_CHARS[@step%TICK_CHARS.size].to_s
       @step += 1
-
       progress
     end
 
     def status_msg
       case @status
       when WAITING
-        return " waiting... ".colorize.fore(:yellow).to_s + " #{progress_msg} #{get_progress}"
+        return "waiting #{get_progress}".colorize.fore(:light_yellow).to_s + " #{progress_msg}"
       when RUNNING
-        return " running... ".colorize.fore(:cyan).to_s + "#{progress_msg} #{get_progress}"
+        return "running #{get_progress}".colorize.fore(:light_cyan).to_s + " #{progress_msg}"
       when DONE
-        return " done. ".colorize.fore(:light_blue).to_s + " #{progress_msg} #{@elapsed_time}"
+        return "done.".colorize.fore(:light_gray).to_s + " #{progress_msg} #{@elapsed_time}"
       when ERROR
-        return " error! ".colorize.fore(:red).to_s + " #{progress_msg}"
+        return "error!".colorize.fore(:red).to_s + " #{progress_msg}"
       end
     end
 
     def to_s(indent = 0) : String
       indent_spaces = "" + " " * (indent * 4)
 
-      job_s = String::Builder.new("#{@name} #{status_msg}\n")
+      job_s = String::Builder.new("#{@name}".colorize.mode(:bold).to_s + " #{status_msg}\n")
 
       depends_on.each do |sub_job|
         job_s << "#{indent_spaces} - #{sub_job.to_s(indent+1)}"
@@ -91,7 +83,7 @@ module Neph
     end
 
     def progress_msg : String
-      "#{progress}/#{progress_max} (#{progress_percent}%)"
+      "[#{progress}/#{progress_max}] #{progress_percent}%"
     end
 
     def progress_percent : Int32

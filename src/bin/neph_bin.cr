@@ -85,10 +85,8 @@ class NephBin
   end
 
   def print_status(msg : String, prev_lines : Int32)
-    prev_lines.times do |_|
-      print "\e[1A\e[1G\e[0J"
-    end
-    puts msg
+    print "\e[#{prev_lines}A" if prev_lines > 0
+    puts "\e[J#{msg}"
   end
 
   include Neph

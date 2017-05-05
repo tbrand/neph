@@ -10,7 +10,7 @@ module Neph
   LOG_OUT = "log.out"
   LOG_ERR = "log.err"
 
-  STATUS_CHECK_INTERVAL = 0.08
+  STATUS_CHECK_INTERVAL = 0.1
 
   alias YHash = Hash(YAML::Type, YAML::Type)
   alias YArray = Array(YAML::Type)
