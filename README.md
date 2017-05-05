@@ -36,6 +36,8 @@ Execute `neph`
 > neph
 ```
 
+STDOUT and STDERR logs are located at `.neph/log/[job_name]/*`
+
 ### Options
 
 You can specify job name by `-j`. In neph.yml,
