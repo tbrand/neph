@@ -12,7 +12,7 @@ module Neph
     getter status_code  : Int32 = 0
     getter elapsed_time : String
 
-    def initialize(@name : String, @command : String)
+    def initialize(@name : String, @command : String, @chdir : String = Dir.current)
       @depends_on = [] of Job
       @log_dir = "#{neph_log_dir}/#{@name}"
       @step = 0
@@ -145,7 +145,8 @@ module Neph
           @command,
           shell: true,
           output: stdout,
-          error: stderr
+          error: stderr,
+          chdir: @chdir
         )
       end
 

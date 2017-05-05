@@ -19,11 +19,16 @@ module Neph
       end
 
       job_config = config[job_name].as(YHash)
+      job_command = if job_config.has_key?("command")
+                      job_config["command"].as(String)
+                    else
+                      ""
+                    end
 
-      if job_config.has_key?("command")
-        job = Job.new(job_name, job_config["command"].as(String))
+      if job_config.has_key?("chdir")
+        job = Job.new(job_name, job_command, job_config["chdir"].as(String))
       else
-        job = Job.new(job_name, "")
+        job = Job.new(job_name, job_command)
       end
 
       if job_config.has_key?("depends_on")

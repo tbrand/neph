@@ -9,10 +9,13 @@ main:
     - sub3
 
 sub0:
-  command:
+  command: |
+    ls -la
     sleep 0.8
   depends_on:
     sub0_1
+  chdir:
+    sample
 
 sub0_1:
   command:
