@@ -1,34 +1,74 @@
 # Neph
 
-Modern job processor written in Crystal.
-
-
+Modern command line base job processor written in Crystal.:rocket:
+![neph](https://cloud.githubusercontent.com/assets/3483230/25742195/56b558c6-31c9-11e7-88d2-a8cd91558293.gif)
 
 ## Installation
 
-Add this to your application's `shard.yml`:
-
-```yaml
-dependencies:
-  neph:
-    github: [your-github-name]/neph
+Cloning this project
+```bash
+git clone https://github.com/tbrand/neph
 ```
+
+Compile
+```bash
+cd neph; shards build
+```
+
+Now executable binary is at `neph/bin/neph`.
 
 ## Usage
 
-```crystal
-require "neph"
+Put `neph.yml` at root of your project
+```yaml
+main:
+  command:
+    echo "Hello Neph!"
 ```
 
-TODO: Write usage instructions here
+Execute `neph`
+```bash
+> neph
+```
 
-## Development
+### Options
 
-TODO: Write development instructions here
+You can specify job name by `-j`. In neph.yml,
+```yaml
+hello:
+  command:
+    echo "Hello!"
+```
+Then,
+```bash
+> neph -j hello
+```
+
+To see other usages, use `--help` option
+```bash
+> neph --help
+```
+
+### neph.yml
+
+You can define dependencies between jobs like this
+```bash
+main:
+  command:
+    echo "Main!"
+  depends_on:
+    - hello
+hello:
+  command:
+    echo "Hello!"
+```
+
+Here `main` job depends on `hello`. So when you execute `neph`, `hello` job is triggered before the execution of the `main` job.
+See [sample]() for details.
 
 ## Contributing
 
-1. Fork it ( https://github.com/[your-github-name]/neph/fork )
+1. Fork it ( https://github.com/tbrand/neph/fork )
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
@@ -36,4 +76,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [[your-github-name]](https://github.com/[your-github-name]) taicsuzu - creator, maintainer
+- [tbrand](https://github.com/tbrand) Taichiro Suzuki - creator, maintainer
