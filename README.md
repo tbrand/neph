@@ -1,6 +1,6 @@
 # Neph
 
-Modern command line base job processor written in Crystal.:rocket:
+Modern command line base job processor written in Crystal. :rocket:
 ![neph](https://cloud.githubusercontent.com/assets/3483230/25742195/56b558c6-31c9-11e7-88d2-a8cd91558293.gif)
 
 ## Installation
@@ -63,8 +63,8 @@ hello:
     echo "Hello!"
 ```
 
-Here `main` job depends on `hello`. So when you execute `neph`, `hello` job is triggered before the execution of the `main` job.
-See [sample]() for details.
+Here `main` job depends on `hello`. So when you execute `neph`, `hello` job is triggered before the execution of the `main` job.  
+See [sample](https://github.com/tbrand/neph/blob/master/sample/neph.yml) for details.
 
 ## Contributing
 
