@@ -6,7 +6,7 @@ module Neph
     end
     
     def status_msg
-      progress_msg + "  " + progress_bar
+      " " + progress_bar
     end
 
     def exec_self

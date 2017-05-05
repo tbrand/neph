@@ -73,6 +73,10 @@ hello:
 Here `main` job depends on `hello`. So when you execute `neph`, `hello` job is triggered before the execution of the `main` job.  
 See [sample](https://github.com/tbrand/neph/blob/master/sample/neph.yml) for details.
 
+## TODO
+ - [ ] skip_if_not_update: source_file in neph.yml
+ - [ ] `neph clean`
+
 ## Contributing
 
 1. Fork it ( https://github.com/tbrand/neph/fork )
