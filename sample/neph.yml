@@ -19,8 +19,6 @@ sub0_1:
     sleep 0.4
 
 sub1:
-  command:
-    sleep 1
   depends_on:
     - sub1_1
     - sub1_2

@@ -140,12 +140,14 @@ module Neph
 
       s = Time.now
 
-      process = Process.run(
-        @command,
-        shell: true,
-        output: stdout,
-        error: stderr
-      )
+      unless @command.empty?
+        process = Process.run(
+          @command,
+          shell: true,
+          output: stdout,
+          error: stderr
+        )
+      end
 
       e = Time.now
 
@@ -154,7 +156,11 @@ module Neph
       stdout.close
       stderr.close
 
-      @status_code = process.exit_status
+      @status_code = if process.nil?
+                       0
+                     else
+                       process.exit_status
+                     end
     end
 
     def exec_sub_job

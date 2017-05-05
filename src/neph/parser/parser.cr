@@ -20,11 +20,11 @@ module Neph
 
       job_config = config[job_name].as(YHash)
 
-      unless job_config.has_key?("command")
-        abort error("No 'command' found in #{job_name} at")
+      if job_config.has_key?("command")
+        job = Job.new(job_name, job_config["command"].as(String))
+      else
+        job = Job.new(job_name, "")
       end
-
-      job = Job.new(job_name, job_config["command"].as(String))
 
       if job_config.has_key?("depends_on")
         if job_config["depends_on"].is_a?(YArray)
