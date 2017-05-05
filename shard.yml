@@ -1,0 +1,13 @@
+name: neph
+version: 0.1.0
+
+authors:
+  - Taichiro Suzuki <taichiro0709@gmail.com>
+
+targets:
+    neph:
+      main: src/bin/neph_bin.cr
+
+crystal: 0.22.0
+
+license: MIT
