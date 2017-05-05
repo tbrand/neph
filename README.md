@@ -2,7 +2,6 @@
 
 A modern command line job processor written in Crystal that can execute jobs concurrently. :rocket:  
 ![neph](https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif)  
-[Here](https://github.com/tbrand/neph/blob/master/sample/neph.yml) is how to execute the above jobs.  
 
 ## Used
 
