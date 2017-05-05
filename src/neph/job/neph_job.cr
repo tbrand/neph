@@ -6,7 +6,7 @@ module Neph
     end
     
     def status_msg
-      " " + progress_bar
+      progress_bar
     end
 
     def exec_self
@@ -18,9 +18,9 @@ module Neph
     end
 
     def progress_bar : String
-      percent_bar = ("#" * (progress_percent/2)).colorize.fore(:green)
-      percent_bar_empty = " " * (50-progress_percent/2)
-      "[#{percent_bar}#{percent_bar_empty}]"
+      percent_bar = ("|" * (progress_percent/2)).colorize.fore(:green)
+      percent_bar_empty = ("|" * (50-progress_percent/2)).colorize.fore(:dark_gray)
+      " #{percent_bar}#{percent_bar_empty}"
     end
 
     # Override
