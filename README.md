@@ -1,11 +1,13 @@
 # Neph
 
-Modern command line job processor written in Crystal. :rocket:  
+A modern command line job processor written in Crystal that can execute jobs concurrently. :rocket:  
 ![neph](https://cloud.githubusercontent.com/assets/3483230/25742195/56b558c6-31c9-11e7-88d2-a8cd91558293.gif)  
 [Here](https://github.com/tbrand/neph/blob/master/sample/neph.yml) is how to execute the above jobs.  
 
+## Used
+
 Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest).  
-In [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest), building time is reduced from 102[sec] to 33[sec].  
+In which_is_the_fastest, building time is reduced from 102[sec] to 33[sec].  
 [neph.yml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yml) is here.
 
 ## Installation
