@@ -1,7 +1,7 @@
 # Neph
 
 Modern command line base job processor written in Crystal. :rocket:
-![neph](https://cloud.githubusercontent.com/assets/3483230/25742195/56b558c6-31c9-11e7-88d2-a8cd91558293.gif)
+![neph](https://cloud.githubusercontent.com/assets/3483230/25742195/56b558c6-31c9-11e7-88d2-a8cd91558293.gif)  
 [Here](https://github.com/tbrand/neph/blob/master/sample/neph.yml) is how to execute the above jobs.
 
 ## Installation
