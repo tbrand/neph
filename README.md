@@ -1,12 +1,15 @@
 # Neph
 
-A modern command line job processor written in Crystal that can execute jobs concurrently. :rocket:
+A modern command line job processor written in Crystal that can execute jobs concurrently. :rocket:  
+Neph can be substitute for `make` command. :rocket:
 
 ![neph](https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif)  
 
-## Used
-
-Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest). In `which_is_the_fastest`, building time is **reduced from 102[sec] to 33[sec]**. [neph.yml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yml) is here.
+Neph is self-hosting. So after installing neph, try
+```bash
+> neph
+```
+at installed directory.
 
 ## Installation
 
@@ -60,7 +63,7 @@ To see other usages, use `--help` option
 ### neph.yml
 
 You can define dependencies between jobs like this
-```bash
+```yaml
 main:
   command:
     echo "Main!"
@@ -71,13 +74,47 @@ hello:
     echo "Hello!"
 ```
 
-Here `main` job depends on `hello`. So when you execute `neph`, `hello` job is triggered before the execution of the `main` job.  
+Here `main` job depends on `hello`. So when you execute `neph`, `hello` job is triggered before the execution of the `main` job.
+
+You can ignore errors by `ignore_error: true`
+```yaml
+main:
+  command:
+    echo "Main!"
+  depends_on:
+    - hello
+hello:
+  command:
+    invalid_command
+  ignore_error:
+    true
+```
+In this jobs, hello job will raise an error since `invalid_command` command doesn't exist. But main job will be triggered by ignoring the error.
+
+You can specify sources by `sources:` for the jobs like `make` command.
+```yaml
+main:
+  command:
+    echo "Main!"
+  depends_on:
+    - hello
+  sources:
+    - src/test.c
+hello:
+  command:
+    invalid_command
+  ignore_error:
+    true
+```
+If the sources are not updated, the job will be skipped.
+
 See [sample](https://github.com/tbrand/neph/blob/master/sample/neph.yml) for details.
 
+## Used
+
+Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest). In `which_is_the_fastest`, building time is **reduced from 102[sec] to 33[sec]**. [neph.yml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yml) is here.
+
 ## TODO
- - [ ] source:
- - [x] ignore_error: true or false (Default is true)
- - [ ] `neph clean`
  - [ ] Add specs
  - [ ] Set log types
 

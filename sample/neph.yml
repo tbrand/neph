@@ -19,6 +19,7 @@ sub0:
 
 sub0_1:
   command:
+    # invalid command
     ttttt
     sleep 0.4
   ignore_error:

@@ -33,13 +33,13 @@ module Neph
                            false
                          end if job_config.has_key?("ignore_error")
 
-      if job_config.has_key?("source")
-        if job_config["source"].is_a?(YArray)
-          job_config["source"].as(YArray).each do |source|
+      if job_config.has_key?("sources")
+        if job_config["sources"].is_a?(YArray)
+          job_config["sources"].as(YArray).each do |source|
             job.add_sources(source_files(source.as(String)))
           end
         else
-          job.add_sources(source_files(job_config["source"].as(String)))
+          job.add_sources(source_files(job_config["sources"].as(String)))
         end
       end
 

@@ -151,18 +151,25 @@ module Neph
     end
 
     def up_to_date? : Bool
-      res = true
+      return false if @sources.size == 0
 
+      res = true
       @sources.each do |source|
+        stat = File.stat(source)
+        
         if File.exists?(tmp_file(source))
-          # check up to date or not
+          tmp_stat = File.stat(tmp_file(source))
+          if stat.ctime != tmp_stat.atime
+            File.touch(tmp_file(source), stat.ctime)
+            res = false
+          end
         else
-          File.write(tmp_file(source), "abc")
+          File.touch(tmp_file(source), stat.ctime)
           res = false
         end
       end
 
-      false
+      res
     end
 
     def tmp_file(source : String) : String
