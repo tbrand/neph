@@ -85,11 +85,11 @@ main:
     - hello
 hello:
   command:
-    invalid_command
+    hogehoge
   ignore_error:
     true
 ```
-In this jobs, hello job will raise an error since `invalid_command` command doesn't exist. But main job will be triggered by ignoring the error.
+In this jobs, hello job will raise an error since `hogehoge` command doesn't exist. But main job will be triggered by ignoring the error.
 
 You can specify sources by `sources:` for the jobs like `make` command.
 ```yaml
@@ -102,7 +102,7 @@ main:
     - src/test.c
 hello:
   command:
-    invalid_command
+    hogehoge
   ignore_error:
     true
 ```
@@ -113,10 +113,6 @@ See [sample](https://github.com/tbrand/neph/blob/master/sample/neph.yml) for det
 ## Used
 
 Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest). In `which_is_the_fastest`, building time is **reduced from 102[sec] to 33[sec]**. [neph.yml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yml) is here.
-
-## TODO
- - [ ] Add specs
- - [ ] Set log types
 
 ## Contributing
 

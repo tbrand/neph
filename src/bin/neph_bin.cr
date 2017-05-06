@@ -1,4 +1,6 @@
 require "option_parser"
+require "file_utils"
+require "colorize"
 require "../neph"
 
 class NephBin
@@ -25,11 +27,17 @@ class NephBin
       end
 
       parser.on(
-        "-c CONFIG",
-        "--config=CONFIG",
+        "-y CONFIG",
+        "--yml=CONFIG",
         "Specify a location of neph.yml (Default is #{CONFIG_PATH})"
       ) do |config_path|
         @config_path = config_path
+      end
+
+      parser.on("-c", "--clean", "Cleaning caches") do
+        puts "cleaning caches".colorize.fore(:green).mode(:bold)
+        clean
+        exit 0
       end
 
       parser.on("-v", "--version", "Show the version") do
@@ -42,6 +50,10 @@ class NephBin
         exit 0
       end
     end
+  end
+
+  def clean
+    FileUtils.rm_rf(NEPH_DIR)
   end
 
   def exec

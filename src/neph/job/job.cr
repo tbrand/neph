@@ -25,7 +25,7 @@ module Neph
       @depends_on = [] of Job
       @ws_dir = "#{neph_dir}/#{@name}"
       @log_dir = "#{@ws_dir}/log"
-      @tmp_dir = "#{@ws_dir}/.tmp"
+      @tmp_dir = "#{@ws_dir}/tmp"
       @step = 0
       @status = WAITING
       @elapsed_time = ""

@@ -41,6 +41,8 @@ sub1_2:
 sub2:
   command:
     sleep 5
+  sources:
+    - src/**/*.cr
 
 sub3:
   command:
