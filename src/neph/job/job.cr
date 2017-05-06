@@ -1,22 +1,31 @@
 module Neph
   class Job
+    TICK_CHARS = "⠁⠁⠉⠙⠚⠒⠂⠂⠒⠲⠴⠤⠄⠄⠤⠠⠠⠤⠦⠖⠒⠐⠐⠒⠓⠋⠉⠈⠈ "
+
     WAITING = 0
     RUNNING = 1
     DONE    = 2
     ERROR   = 3
-
-    TICK_CHARS = "⠁⠁⠉⠙⠚⠒⠂⠂⠒⠲⠴⠤⠄⠄⠤⠠⠠⠤⠦⠖⠒⠐⠐⠒⠓⠋⠉⠈⠈ "
+    SKIP    = 4
 
     getter name         : String
     getter command      : String
+    getter ws_dir       : String
     getter log_dir      : String
+    getter tmp_dir      : String
     getter depends_on   : Array(Job)
     getter status_code  : Int32 = 0
     getter elapsed_time : String
 
-    def initialize(@name : String, @command : String, @chdir : String = Dir.current)
+    property chdir : String = Dir.current
+    property ignore_error : Bool = false
+    property sources : Array(String) = [] of String
+
+    def initialize(@name : String, @command : String)
       @depends_on = [] of Job
-      @log_dir = "#{neph_log_dir}/#{@name}"
+      @ws_dir = "#{neph_dir}/#{@name}"
+      @log_dir = "#{@ws_dir}/log"
+      @tmp_dir = "#{@ws_dir}/.tmp"
       @step = 0
       @status = WAITING
       @elapsed_time = ""
@@ -26,8 +35,16 @@ module Neph
       @depends_on.push(job)
     end
 
-    def create_log_dir
-      Dir.mkdir(log_dir) unless Dir.exists?(log_dir)
+    def add_sources(source_files : Array(String))
+      source_files.each do |file|
+        @sources.push(file)
+      end
+    end
+
+    def create_dir
+      Dir.mkdir(@ws_dir) unless Dir.exists?(@ws_dir)
+      Dir.mkdir(@log_dir) unless Dir.exists?(@log_dir)
+      Dir.mkdir(@tmp_dir) unless Dir.exists?(@tmp_dir)
     end
 
     def get_progress : String
@@ -46,6 +63,8 @@ module Neph
         return "done.".colorize.fore(:light_gray).to_s + " #{progress_msg} #{@elapsed_time}"
       when ERROR
         return "error!".colorize.fore(:red).to_s + " #{progress_msg}"
+      when SKIP
+        return "up to date".colorize.fore(:light_blue).to_s + " #{progress_msg}"
       end
     end
 
@@ -105,30 +124,54 @@ module Neph
     end
 
     def done?
-      @status == DONE || @status == ERROR
+      @status == DONE || @status == ERROR || @status == SKIP
     end
 
     def exec(channel : Channel(Job))
       @status = WAITING
       exec_sub_job if @depends_on.size > 0
 
-      create_log_dir
+      create_dir
 
       @status = RUNNING
-      exec_self
 
-      if @status_code == 0
-        @status = DONE
+      if up_to_date?
+        @status = SKIP
       else
-        @status = ERROR
+        exec_self
+
+        if @status_code == 0
+          @status = DONE
+        else
+          @status = ERROR
+        end
       end
 
       channel.send(self)
     end
 
+    def up_to_date? : Bool
+      res = true
+
+      @sources.each do |source|
+        if File.exists?(tmp_file(source))
+          # check up to date or not
+        else
+          File.write(tmp_file(source), "abc")
+          res = false
+        end
+      end
+
+      false
+    end
+
+    def tmp_file(source : String) : String
+      "#{@tmp_dir}/#{source.gsub("/", "_")}"
+    end
+
     def exec_self
-      stdout = File.open("#{log_dir}/#{log_out}", "w")
-      stderr = File.open("#{log_dir}/#{log_err}", "w")
+      stdout = File.open("#{@log_dir}/#{log_out}", "w")
+      stderr = File.open("#{@log_dir}/#{log_err}", "w")
 
       s = Time.now
 
@@ -168,9 +211,11 @@ module Neph
       depends_on.each do |_|
         sub_job = channel.receive
         if sub_job.status_code != 0
-          puts error("'#{sub_job.name}' failed with status code (#{sub_job.status_code})")
-          puts error("Error log exists at #{sub_job.log_dir}/#{log_err}")
-          exit -1
+          if !sub_job.ignore_error
+            puts error("'#{sub_job.name}' failed with status code (#{sub_job.status_code})")
+            puts error("Error log exists at #{sub_job.log_dir}/#{log_err}")
+            exit -1
+          end
         end
       end
     end

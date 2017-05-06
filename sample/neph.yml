@@ -19,7 +19,10 @@ sub0:
 
 sub0_1:
   command:
+    ttttt
     sleep 0.4
+  ignore_error:
+    true
 
 sub1:
   depends_on:

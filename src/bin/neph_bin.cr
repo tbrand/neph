@@ -14,6 +14,7 @@ class NephBin
   
   def parse_option!
     OptionParser.parse! do |parser|
+      parser.banner = "Usage: neph [options]"
 
       parser.on(
         "-j JOB",

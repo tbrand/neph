@@ -1,3 +1,5 @@
 main:
   command:
     shards build --release
+  source:
+    src/**/*.cr

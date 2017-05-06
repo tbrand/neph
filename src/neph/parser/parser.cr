@@ -25,10 +25,22 @@ module Neph
                       ""
                     end
 
-      if job_config.has_key?("chdir")
-        job = Job.new(job_name, job_command, job_config["chdir"].as(String))
-      else
-        job = Job.new(job_name, job_command)
+      job = Job.new(job_name, job_command)
+      job.chdir = job_config["chdir"].as(String) if job_config.has_key?("chdir")
+      job.ignore_error = if job_config["ignore_error"].as(String) == "true"
+                           true
+                         else
+                           false
+                         end if job_config.has_key?("ignore_error")
+
+      if job_config.has_key?("source")
+        if job_config["source"].is_a?(YArray)
+          job_config["source"].as(YArray).each do |source|
+            job.add_sources(source_files(source.as(String)))
+          end
+        else
+          job.add_sources(source_files(job_config["source"].as(String)))
+        end
       end
 
       if job_config.has_key?("depends_on")
@@ -42,6 +54,11 @@ module Neph
       end
 
       job
+    end
+
+    def source_files(path : String) : Array(String)
+      relative_path = File.expand_path(path, Dir.current)
+      Dir.glob(relative_path)
     end
   end
 end

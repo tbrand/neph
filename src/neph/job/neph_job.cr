@@ -13,7 +13,7 @@ module Neph
       # do nothing
     end
 
-    def create_log_dir
+    def create_dir
       # do nothing
     end
 
