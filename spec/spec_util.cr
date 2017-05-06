@@ -1,15 +1,20 @@
+def neph_install
+  puts "Installing neph..."
+  `shards build`
+end
+
 def neph_clean
-  `neph --clean`
+  `./bin/neph --clean`
 end
 
 def exec_neph(config_file : String, job_name : String)
   base_path = File.expand_path("../configs", __FILE__)
-  `neph -y #{base_path}/#{config_file} -j #{job_name}`
+  `./bin/neph -y #{base_path}/#{config_file} -j #{job_name}`
 end
 
 def exec_neph(config_file : String)
   base_path = File.expand_path("../configs", __FILE__)
-  `neph -y #{base_path}/#{config_file}`
+  `./bin/neph -y #{base_path}/#{config_file}`
 end
 
 def stdout_of(job_name : String) : String

@@ -1,6 +1,8 @@
 require "./spec_helper"
 require "./spec_util"
 
+neph_install
+
 describe Neph do
   Spec.before_each do
     neph_clean

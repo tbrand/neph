@@ -1,7 +1,10 @@
 # Neph
 
+[![Build Status](https://travis-ci.org/tbrand/neph.svg?branch=master)](https://travis-ci.org/tbrand/neph)
+[![GitHub release](https://img.shields.io/github/release/tbrand/neph.svg)](https://github.com/tbrand/neph/releases)
+
 A modern command line job processor written in Crystal that can execute jobs concurrently. :rocket:  
-Neph can be substitute for `make` command. :rocket:
+Neph can be substitute for `make` command. :rocket:  
 
 ![neph](https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif)  
 
