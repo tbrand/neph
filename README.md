@@ -79,6 +79,7 @@ See [sample](https://github.com/tbrand/neph/blob/master/sample/neph.yml) for det
  - [ ] ignore_error: true or false (Default is true)
  - [ ] `neph clean`
  - [ ] Add specs
+ - [ ] Set log types
 
 ## Contributing
 
