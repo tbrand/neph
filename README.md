@@ -76,7 +76,9 @@ See [sample](https://github.com/tbrand/neph/blob/master/sample/neph.yml) for det
 
 ## TODO
  - [ ] skip_if_not_update: source_file in neph.yml
+ - [ ] ignore_error: true or false (Default is true)
  - [ ] `neph clean`
+ - [ ] Add specs
 
 ## Contributing
 
