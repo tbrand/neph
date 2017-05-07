@@ -11,6 +11,8 @@ module Neph
 
   STATUS_CHECK_INTERVAL = 0.1
 
+  @quiet = false
+
   alias YHash = Hash(YAML::Type, YAML::Type)
   alias YArray = Array(YAML::Type)
 
@@ -28,5 +30,34 @@ module Neph
 
   def ready_dir
     Dir.mkdir(neph_dir) unless Dir.exists?(neph_dir)
+  end
+
+  def format_time(time)
+    minutes = time.total_minutes
+    return "#{minutes.round(2)}m" if minutes >= 1
+
+    seconds = time.total_seconds
+    return "#{seconds.round(2)}s" if seconds >= 1
+
+    millis = time.total_milliseconds
+    return "#{millis.round(2)}ms" if millis >= 1
+
+    "#{(millis * 1000).round(2)}µs"
+  end
+
+  def log_ln(msg : String)
+    log(msg + "\n", false)
+  end
+
+  def log_ln(msg : String, force : Bool)
+    log(msg + "\n", force)
+  end
+
+  def log(msg : String)
+    log(msg, false)
+  end
+
+  def log(msg : String, force : Bool)
+    print msg if !@quiet || force
   end
 end

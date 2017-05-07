@@ -226,25 +226,12 @@ module Neph
         sub_job = channel.receive
         if sub_job.status_code != 0
           if !sub_job.ignore_error
-            puts error("'#{sub_job.name}' failed with status code (#{sub_job.status_code})")
-            puts error("Error log exists at #{sub_job.log_dir}/#{log_err}")
+            log_ln error("'#{sub_job.name}' failed with status code (#{sub_job.status_code})"), true
+            log_ln error("Error log exists at #{sub_job.log_dir}/#{log_err}"), true
             exit -1
           end
         end
       end
-    end
-
-    def format_time(time)
-      minutes = time.total_minutes
-      return "#{minutes.round(2)}m" if minutes >= 1
-
-      seconds = time.total_seconds
-      return "#{seconds.round(2)}s" if seconds >= 1
-
-      millis = time.total_milliseconds
-      return "#{millis.round(2)}ms" if millis >= 1
-
-      "#{(millis * 1000).round(2)}µs"
     end
 
     include Neph

@@ -34,19 +34,23 @@ class NephBin
         @config_path = config_path
       end
 
+      parser.on("-q", "--quiet", "Quiet mode, print out nothing") do
+        @quiet = true
+      end
+
       parser.on("-c", "--clean", "Cleaning caches") do
-        puts "cleaning caches".colorize.fore(:green).mode(:bold)
+        log_ln "cleaning caches".colorize.fore(:green).mode(:bold).to_s
         clean
         exit 0
       end
 
       parser.on("-v", "--version", "Show the version") do
-        puts VERSION
+        log_ln VERSION
         exit 0
       end
 
       parser.on("-h", "--help", "Show this help") do
-        puts parser
+        log_ln parser.to_s
         exit 0
       end
     end
@@ -57,49 +61,10 @@ class NephBin
   end
 
   def exec
-    channel = Channel(Job).new
-    
-    neph_job = NephJob.new
-    neph_job.add_sub_job(parse_yaml(@job_name, @config_path))
+    main_job = parse_yaml(@job_name, @config_path)
 
-    spawn do
-      neph_job.exec(channel)
-    end
-
-    print_status(neph_job)
-
-    if neph_job.status_code == 0
-      puts "\nFinished in #{neph_job.elapsed_time}".colorize.mode(:bold)
-    else
-      puts "\nError with exit code #{neph_job.status_code}".colorize.mode(:bold)
-    end
-  end
-
-  def print_status(job : Job)
-    prev_lines = 0
-
-    loop do
-      prev_lines = print_status(job, prev_lines)
-
-      if job.done?
-        job.fin
-        print_status(job, prev_lines)
-        break
-      end
-
-      sleep STATUS_CHECK_INTERVAL
-    end
-  end
-
-  def print_status(job : Job, prev_lines) : Int32
-    status_msg = job.to_s
-    print_status(status_msg, prev_lines)
-    status_msg.lines.size
-  end
-
-  def print_status(msg : String, prev_lines : Int32)
-    print "\e[#{prev_lines}A" if prev_lines > 0
-    puts "\e[J#{msg}"
+    job_executor = JobExecutor.new(main_job)
+    job_executor.exec
   end
 
   include Neph
