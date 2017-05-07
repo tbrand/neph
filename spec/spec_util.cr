@@ -1,6 +1,6 @@
 def neph_install
   puts "Installing neph..."
-  `shards build`
+  `shards build --release`
 end
 
 def neph_clean

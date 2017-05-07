@@ -143,11 +143,18 @@ module Neph
         if @status_code == 0
           @status = DONE
         else
+          clean_tmp
           @status = ERROR
         end
       end
 
       channel.send(self)
+    end
+
+    def clean_tmp
+      @sources.each do |source|
+        File.delete(tmp_file(source)) if File.exists?(tmp_file(source))
+      end
     end
 
     def up_to_date? : Bool
