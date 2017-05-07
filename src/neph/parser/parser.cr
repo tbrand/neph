@@ -2,7 +2,8 @@ module Neph
   module Parser
     def parse_yaml(job_name : String, path : String) : Job
       abort error("config file doesn't exist at #{path}") unless File.exists?(path)
-      
+      abort error("#{path} is not a file") unless File.file?(path)
+
       config = YAML.parse(File.read(path)).as_h
 
       job = create_job(config, job_name)
