@@ -22,9 +22,10 @@ module Neph
     end
 
     def progress_bar : String
+      percent_text = "#{progress_percent}%".colorize.fore(:green).mode(:bold)
       percent_bar = ("|" * (progress_percent/2)).colorize.fore(:green)
       percent_bar_empty = ("|" * (50-progress_percent/2)).colorize.fore(:dark_gray)
-      "#{percent_bar}#{percent_bar_empty}"
+      "#{percent_bar}#{percent_text}#{percent_bar_empty}"
     end
 
     def progress_percent : Int32

@@ -1,7 +1,6 @@
 module Neph
   class Job
     TICK_CHARS = "⠁⠁⠉⠙⠚⠒⠂⠂⠒⠲⠴⠤⠄⠄⠤⠠⠠⠤⠦⠖⠒⠐⠐⠒⠓⠋⠉⠈⠈ "
-
     WAITING = 0
     RUNNING = 1
     DONE    = 2
@@ -17,6 +16,8 @@ module Neph
     getter status_code     : Int32 = 0
     getter elapsed_time    : String
     getter current_command : String = ""
+    getter done_command    : Int32 = 0
+    getter commands        : Array(String) = [] of String
 
     property chdir : String = Dir.current
     property ignore_error : Bool = false
@@ -30,6 +31,10 @@ module Neph
       @step = 0
       @status = WAITING
       @elapsed_time = ""
+
+      @commands = @command.split("\n").reject do |command|
+        command.empty?
+      end unless @command.empty?
     end
 
     def add_sub_job(job : Job)
@@ -59,7 +64,7 @@ module Neph
       when WAITING
         return progress_msg + " #{get_progress} waiting".colorize.fore(:light_yellow).to_s
       when RUNNING
-        return progress_msg + " #{get_progress} running".colorize.fore(:light_cyan).to_s + "   > #{@current_command}".colorize.mode(:bright).to_s
+        return progress_msg + " #{get_progress} running (#{progress_percent}%)".colorize.fore(:light_cyan).to_s + " > #{@current_command}".colorize.mode(:bright).to_s
       when DONE
         return progress_msg + " done.".colorize.fore(:light_gray).to_s + "   #{@elapsed_time}"
       when ERROR
@@ -71,13 +76,12 @@ module Neph
 
     def to_s(indent = 0) : String
       indent_spaces = "" + " " * (indent * 4)
-
-      job_s = String::Builder.new("#{@name}".colorize.mode(:bold).to_s + " #{status_msg(indent_spaces)}\n")
+      job_s = String::Builder.new("#{@name}".colorize.mode(:bold).to_s + " #{status_msg(indent_spaces)}")
+      job_s << "\n"
 
       depends_on.each do |sub_job|
         job_s << "#{indent_spaces} - #{sub_job.to_s(indent + 1)}"
       end
-
       job_s.to_s
     end
 
@@ -107,7 +111,8 @@ module Neph
     end
 
     def progress_percent : Int32
-      percent = ((progress.to_f/progress_max.to_f) * 100.0).to_i
+      return 100 if @commands.size == 0
+      ((@done_command.to_f/@commands.size.to_f) * 100.0).to_i
     end
 
     def progress : Int32
@@ -184,9 +189,10 @@ module Neph
 
       s = Time.now
 
-      unless @command.empty?
+      unless @commands.size == 0
 
-        @command.split("\n").each do |command|
+        @commands.each do |command|
+
           next if command.empty?
 
           @current_command = command
@@ -198,6 +204,7 @@ module Neph
             chdir: @chdir
           )
 
+          @done_command += 1
           unless process.exit_status == 0
             @status_code = process.exit_status
             break
@@ -206,15 +213,9 @@ module Neph
       end
 
       e = Time.now
-
       @elapsed_time = format_time(e-s)
-
       stdout.close
       stderr.close
-    end
-
-    def exec_fin
-      
     end
 
     def exec_sub_job

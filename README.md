@@ -18,6 +18,8 @@ at installed directory.
 
 ## Installation
 
+Neph is written in Crystal, so you need Crystal to install Neph. To install Crystal, see [official manual](https://github.com/crystal-lang/crystal).
+
 Cloning this project
 ```bash
 git clone https://github.com/tbrand/neph
