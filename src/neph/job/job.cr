@@ -8,14 +8,15 @@ module Neph
     ERROR   = 3
     SKIP    = 4
 
-    getter name         : String
-    getter command      : String
-    getter ws_dir       : String
-    getter log_dir      : String
-    getter tmp_dir      : String
-    getter depends_on   : Array(Job)
-    getter status_code  : Int32 = 0
-    getter elapsed_time : String
+    getter name            : String
+    getter command         : String
+    getter ws_dir          : String
+    getter log_dir         : String
+    getter tmp_dir         : String
+    getter depends_on      : Array(Job)
+    getter status_code     : Int32 = 0
+    getter elapsed_time    : String
+    getter current_command : String = ""
 
     property chdir : String = Dir.current
     property ignore_error : Bool = false
@@ -53,28 +54,28 @@ module Neph
       progress
     end
 
-    def status_msg
+    def status_msg(indent_spaces = "")
       case @status
       when WAITING
-        return "waiting #{get_progress}".colorize.fore(:light_yellow).to_s + " #{progress_msg}"
+        return progress_msg + " #{get_progress} waiting".colorize.fore(:light_yellow).to_s
       when RUNNING
-        return "running #{get_progress}".colorize.fore(:light_cyan).to_s + " #{progress_msg}"
+        return progress_msg + " #{get_progress} running".colorize.fore(:light_cyan).to_s + "   > #{@current_command}".colorize.mode(:bright).to_s
       when DONE
-        return "done.".colorize.fore(:light_gray).to_s + " #{progress_msg} #{@elapsed_time}"
+        return progress_msg + " done.".colorize.fore(:light_gray).to_s + "   #{@elapsed_time}"
       when ERROR
-        return "error!".colorize.fore(:red).to_s + " #{progress_msg}"
+        return progress_msg + " error!".colorize.fore(:red).to_s
       when SKIP
-        return "up to date".colorize.fore(:light_blue).to_s + " #{progress_msg}"
+        return progress_msg + " up to date".colorize.fore(:light_blue).to_s
       end
     end
 
     def to_s(indent = 0) : String
       indent_spaces = "" + " " * (indent * 4)
 
-      job_s = String::Builder.new("#{@name}".colorize.mode(:bold).to_s + " #{status_msg}\n")
+      job_s = String::Builder.new("#{@name}".colorize.mode(:bold).to_s + " #{status_msg(indent_spaces)}\n")
 
       depends_on.each do |sub_job|
-        job_s << "#{indent_spaces} - #{sub_job.to_s(indent+1)}"
+        job_s << "#{indent_spaces} - #{sub_job.to_s(indent + 1)}"
       end
 
       job_s.to_s
@@ -102,7 +103,7 @@ module Neph
     end
 
     def progress_msg : String
-      "[#{progress}/#{progress_max}] #{progress_percent}%"
+      "[#{progress}/#{progress_max}]"
     end
 
     def progress_percent : Int32
@@ -110,13 +111,7 @@ module Neph
     end
 
     def progress : Int32
-      n = num_of_done_jobs
-
-      if n > progress_max
-        return progress_max
-      else
-        return n
-      end
+      num_of_done_jobs
     end
 
     def progress_max : Int32
@@ -190,13 +185,24 @@ module Neph
       s = Time.now
 
       unless @command.empty?
-        process = Process.run(
-          @command,
-          shell: true,
-          output: stdout,
-          error: stderr,
-          chdir: @chdir
-        )
+
+        @command.split("\n").each do |command|
+          next if command.empty?
+
+          @current_command = command
+          process = Process.run(
+            @current_command,
+            shell: true,
+            output: stdout,
+            error: stderr,
+            chdir: @chdir
+          )
+
+          unless process.exit_status == 0
+            @status_code = process.exit_status
+            break
+          end
+        end
       end
 
       e = Time.now
@@ -205,12 +211,10 @@ module Neph
 
       stdout.close
       stderr.close
+    end
 
-      @status_code = if process.nil?
-                       0
-                     else
-                       process.exit_status
-                     end
+    def exec_fin
+      
     end
 
     def exec_sub_job

@@ -1,7 +1,7 @@
 module Neph
   class JobExecutor
-    def initialize(@job : Job)
-    end
+
+    def initialize(@job : Job); end
 
     def exec
       channel = Channel(Job).new

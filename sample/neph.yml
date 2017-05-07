@@ -10,16 +10,19 @@ main:
 
 sub0:
   command: |
+    sleep 1
     ls -la
     sleep 0.8
+    sleep 1.2
+
+    sleep 3.2
   depends_on:
     sub0_1
   chdir:
     sample
 
 sub0_1:
-  command:
-    # invalid command
+  command: |
     ttttt
     sleep 0.4
   ignore_error:
