@@ -1,41 +1,53 @@
-def new_version
+@current_version = ""
+@new_version = ""
+
+def update_version
   file_path = File.expand_path("../src/neph/version.cr", __FILE__)
   file = File.read(file_path)
 
   if /^.*\"(\d\.\d\.\d)\".*$/ =~ file
-    current_version = $1
-    versions = current_version.split('.')
+    @current_version = $1
+    versions = @current_version.split('.')
     patch_version = versions.last.to_i + 1
-    new_version = versions[0..-2].join('.') + '.' + patch_version.to_s
-    return new_version
+    @new_version = versions[0..-2].join('.') + '.' + patch_version.to_s
+    return
   end
 
   abort "Failed to parse current version"
 end
 
-def bump_version_cr(version)
+def bump_version_cr
   file_path = File.expand_path("../src/neph/version.cr", __FILE__)
 
   file = File.read(file_path)
-  file.sub!(/VERSION = \"(.+)\"/, "VERSION = \"#{version}\"")
+  file.sub!(/VERSION = \"(.+)\"/, "VERSION = \"#{@new_version}\"")
 
   File.write(file_path, file)
   `git add #{file_path}`
 end
 
-def bump_shard_yml(version)
+def bump_shard_yml
   file_path = File.expand_path("../shard.yml", __FILE__)
   
   file = File.read(file_path)
-  file.sub!(/version: (.+)/, "version: #{version}")
+  file.sub!(/version: (.+)/, "version: #{@new_version}")
 
   File.write(file_path, file)
   `git add #{file_path}`
 end
 
-version = new_version
+# Update current version
+update_version
 
-bump_version_cr(version)
-bump_shard_yml(version)
+# Bump versions
+bump_version_cr
+bump_shard_yml
 
-print version
+tag = 'v' + @new_version
+
+puts `git config --global user.name "Travis CI"`
+puts `git config --global user.email "travis@travis-ci.org"`
+puts `git commit -m "[skip ci] bumped version #{@new_version}"`
+puts `git push https://#{ENV['GH_TOKEN']}@github.com/tbrand/neph.git HEAD:master`
+puts `git tag #{tag} -a -m "Release from Travis CI for build number $TRAVIS_BUILD_NUMBER"`
+puts `git push --quiet https://#{ENV['GH_TOKEN']}@github.com/tbrand/neph.git --tags 2> /dev/null`
