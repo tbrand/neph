@@ -1,7 +1,5 @@
 language: crystal
 
-YAML
-
 env:
   global:
     - GIT_TAG=0.1.$TRAVIS_BUILD_NUMBER
