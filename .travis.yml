@@ -26,4 +26,3 @@ deploy:
   on:
     tags: false
     branch: master
-    condition: "other conditions"
