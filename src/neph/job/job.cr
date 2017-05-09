@@ -163,7 +163,7 @@ module Neph
       res = true
       @sources.each do |source|
         stat = File.stat(source)
-        
+
         if File.exists?(tmp_file(source))
           tmp_stat = File.stat(tmp_file(source))
           if stat.ctime != tmp_stat.atime
