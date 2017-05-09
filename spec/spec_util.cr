@@ -16,7 +16,7 @@ def exec_neph(config_file : String, job_name : String)
 end
 
 def exec_neph(config_file : String)
-  puts `./bin/neph -y #{base_path}/#{config_file}`
+  `./bin/neph -y #{base_path}/#{config_file}`
 end
 
 def stdout_of(job_name : String) : String
