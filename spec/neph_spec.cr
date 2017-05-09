@@ -39,6 +39,7 @@ describe Neph do
   it "Can specify sources" do
     exec_neph("up_to_date.yml", "up_to_date")
     date = stdout_of("up_to_date")
+    sleep 1
     exec_neph("up_to_date.yml", "up_to_date")
     stdout_of("up_to_date").should eq(date)
   end

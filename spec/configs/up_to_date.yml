@@ -1,6 +1,6 @@
 up_to_date:
   command:
     date
-  source:
+  sources:
     spec/configs/up_to_date.yml
 
