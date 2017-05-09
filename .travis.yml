@@ -13,9 +13,9 @@ before_deploy:
   - ruby bump.rb $GIT_TAG
   - git diff
   - git add --all
-  - git commit -m "[skip ci] bumped version $GIT_TAG"
-  - git push origin master
-  - git tag $GIT_TAG -a -m "Release from travis: #$TRAVIS_BUILD_NUMBER"
+  - git commit -m "[skip ci] bumped version ${GIT_TAG}"
+  - git push --quiet https://$GH_TOKEN@github.com/tbrand/neph.git master 2> /dev/null
+  - git tag $GIT_TAG -a -m "Release from travis: #${TRAVIS_BUILD_NUMBER}"
   - git push --quiet https://$GH_TOKEN@github.com/tbrand/neph.git --tags 2> /dev/null
 deploy:
   provider: releases
