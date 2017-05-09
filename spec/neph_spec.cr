@@ -37,6 +37,7 @@ describe Neph do
   end
 
   it "Can specify sources" do
+    File.touch File.expand_path("../configs/up_to_date.yml", __FILE__)
     exec_neph("up_to_date.yml", "up_to_date")
     date = stdout_of("up_to_date")
     sleep 1
