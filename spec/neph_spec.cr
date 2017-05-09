@@ -37,17 +37,20 @@ describe Neph do
   end
 
   it "Can specify sources" do
-    File.touch File.expand_path("../../src/neph.cr", __FILE__)
-    # for debug
-    puts `ls -la #{File.expand_path("../..", __FILE__)}/.neph/up_to_date/tmp`
     exec_neph("up_to_date.yml", "up_to_date")
     date = stdout_of("up_to_date")
-    # for debug
-    puts `ls -la #{File.expand_path("../..", __FILE__)}/.neph/up_to_date/tmp`
+
     sleep 1
+
+    # The source has not been updated
     exec_neph("up_to_date.yml", "up_to_date")
-    # for debug
-    puts `ls -la #{File.expand_path("../..", __FILE__)}/.neph/up_to_date/tmp`
     stdout_of("up_to_date").should eq(date)
+
+    sleep 1
+
+    # The source has not been updated
+    File.touch File.expand_path("../../src/neph.cr", __FILE__)
+    exec_neph("up_to_date.yml", "up_to_date")
+    stdout_of("up_to_date").should_not eq(date)
   end
 end
