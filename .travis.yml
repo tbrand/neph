@@ -15,7 +15,7 @@ before_deploy:
   - git add --all
   - git commit -m "[skip ci] bumped version ${GIT_TAG}"
   - git push https://$GH_TOKEN@github.com/tbrand/neph.git master
-  - git tag $GIT_TAG -a -m "Release from Travis CI for build #${TRAVIS_BUILD_NUMBER}"
+  - git tag $GIT_TAG -a -m "Release from Travis CI for build number $TRAVIS_BUILD_NUMBER"
   - git push --quiet https://$GH_TOKEN@github.com/tbrand/neph.git --tags 2> /dev/null
 deploy:
   provider: releases
