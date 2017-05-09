@@ -163,9 +163,13 @@ module Neph
       res = true
       @sources.each do |source|
         stat = File.stat(source)
+        puts "stat"
+        pp stat
 
         if File.exists?(tmp_file(source))
           tmp_stat = File.stat(tmp_file(source))
+          puts "tmp_stat"
+          pp tmp_stat
           if stat.ctime != tmp_stat.atime
             File.touch(tmp_file(source), stat.ctime)
             res = false
