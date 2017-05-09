@@ -7,14 +7,16 @@ def neph_clean
   `./bin/neph --clean`
 end
 
+def base_path
+  File.expand_path("../configs", __FILE__)
+end
+
 def exec_neph(config_file : String, job_name : String)
-  base_path = File.expand_path("../configs", __FILE__)
-  `./bin/neph -y #{base_path}/#{config_file} -j #{job_name}`
+  puts `./bin/neph -y #{base_path}/#{config_file} -j #{job_name}`
 end
 
 def exec_neph(config_file : String)
-  base_path = File.expand_path("../configs", __FILE__)
-  `./bin/neph -y #{base_path}/#{config_file}`
+  puts `./bin/neph -y #{base_path}/#{config_file}`
 end
 
 def stdout_of(job_name : String) : String
