@@ -1,1 +1,9 @@
 language: crystal
+
+deploy:
+  provider: releases
+  api_key: "a7949e664c26335dc04cb2f7d9decb48b71d0047"
+  file: bin/neph
+  skip_cleanup: true
+  on:
+    tags: true
