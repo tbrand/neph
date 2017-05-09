@@ -11,8 +11,9 @@ before_deploy:
   - git config --global user.name "Travis CI"
   - git config --global user.email "travis@travis-ci.org"
   - ruby bump.rb $GIT_TAG
+  - git diff
   - git add --all
-  - git commit -m "[skip ci] bump version: $GIT_TAG"
+  - git commit -m "[skip ci] bumped version: $GIT_TAG"
   - git push origin master
   - git tag $GIT_TAG -a -m "Release from travis: #$TRAVIS_BUILD_NUMBER"
   - git push --quiet https://$GH_TOKEN@github.com/tbrand/neph.git --tags 2> /dev/null
