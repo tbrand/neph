@@ -171,6 +171,7 @@ module Neph
           puts "tmp_stat"
           pp tmp_stat
           if stat.ctime != tmp_stat.atime
+            puts "point 0"
             File.touch(tmp_file(source), stat.ctime)
             res = false
           end
