@@ -2,5 +2,4 @@ up_to_date:
   command:
     date
   sources:
-    spec/configs/up_to_date.yml
-
+    src/neph.cr
