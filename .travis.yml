@@ -6,12 +6,15 @@ env:
 
 before_deploy:
   - mkdir packages
-  - cp bin/neph packages/.
   - tar czf packages/releases-$GIT_TAG.tar.gz $(ls -I packages)
   - zip -q packages/releases-$GIT_TAG.zip -r $(ls -I packages)
   - git config --global user.name "Travis CI"
   - git config --global user.email "travis@travis-ci.org"
-  - git tag $GIT_TAG -a -m "Commit from Travis CI for build $TRAVIS_BUILD_NUMBER"
+  - ruby bump.rb $GIT_TAG
+  - git add --all
+  - git commit -m "[skip ci] bump version: $GIT_TAG"
+  - git push origin master
+  - git tag $GIT_TAG -a -m "Release from travis: #$TRAVIS_BUILD_NUMBER"
   - git push --quiet https://$GH_TOKEN@github.com/tbrand/neph.git --tags 2> /dev/null
 deploy:
   provider: releases
