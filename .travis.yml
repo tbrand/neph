@@ -6,7 +6,9 @@ env:
     - secure: OK2qB0wVo81DxkdB2Iq9HG2zcKHeKRYhPDk3RYjU7gHidRQf+ztsoM6vu484cR3aXC6aUnRgYPvwj39hfIGe06I04Tc11iK1jdfNuMrm943KYkmgU6JH+xj8CJ8MWW6G5GzyJuiRRTIWeAdeDrmAmAJWQAtGX3eFDz1HDCK+i/HMovmT7Zke3LbodZkKJxDySwRi1mBygMGpqUU2yC4maFiD9Q4pPqZ2YrLKl3dei7z18f78HaLivfPwj7Hv0WI+h0keGu2/Dzlnvn/zaADwXdfGN/6lsSj9dPd+eBcXzS/ZvSOMVS50rpy4aYFI6atuiol1ekxqRBISmgRDBdXLesU/9LRQZbCT4x4cbdULLO+jBfWg1SyzbZZ24njjwMKvigRy9cJpDVWDLMxVv+sdhrEXguie9HjhjruECzez8Pm7TJwuECyHQ4cyCSLy7vtlrtlnWUdmP4fdXbbHA41p3ajauBeno4WYyOD+vF1DaQU8gb9PQ5uK47CvqZG2sOJyaLnq8I1uT/HM2TUwlJ97E/cMelOe6NNhiaa0C6uUcKYLrFga9szklm1XIjTRhaEer/Y6tL7BzrLI4RX+dPhhIFBRqsMIlnwt3fECTlsk+C67m0K0Wv/woW93IeZCoYinAwmzyihwQIvkCY+IegvxjFv8zzsVCKZbOFu5VE6Blnw=
 
 before_deploy:
+  - echo "Start deploying..."
   - mkdir packages
+  - cp bin/neph packages/.
   - tar czf packages/releases-$GIT_TAG.tar.gz $(ls -I packages)
   - zip -q packages/releases-$GIT_TAG.zip -r $(ls -I packages)
   - git config --global user.name "Travis CI"
@@ -17,8 +19,11 @@ before_deploy:
 deploy:
   provider: releases
   api_key: PTsKldqeZRaY4AbfODkhTPDgvwb8XjqcVC8JWUqpBv9tytYOEJONkHVlGmo0rNxHLa9fkbCpOLnhiyCpJE3Fu4jywRbAHK/lI+nai/p/cKuHadVmkZQBhHCk433tUzsZh+J4eYfrxrBOFnOTI6HN7qx/nn/RYHZTV7SBOCGWlGUdXupRoDPGMMhWfh/3RjjMjC6N7qisSfYsouTUY/ihel17noaPgBeKI9tQQr9rFHFkDn+EIb/oXSSAQ5H97qN6Dxb8X69na6ON25s3FEBVNsixBpbk8/JZVA+2nCHI6kV72yA0QvO8Yx+rR+VxHApbEhY1B7UoUKLU8EFS+/H1Glx96C3mv2Q6oTQJXxANQUFbmMfg3r5AWuaL7suMa5LgaY7x4oIGsjfED/LREs9v6Gjy5YIMbD+Pf99nXWfbed56c46jjAIOupoTysJzuBVglDs67aRHAFZ2qSa5vjt5H1RJZtW0WvPDk0hlQ6TfAi7kbG9mfT4e1GD+zR8j5tjNL84KSRIwEOCDes4dXJDwlf967UkJojrQFJnHSPjdvaXM0zxuuLZxAdyD0Ore8va96kVazI12ERjRYfiMOwqi7h1jxpKRO1VnMZSgSXsEVTi7SdBbEac7iMny9ZOz7ocM4Lz+aIojZ6t48i6cSLoF3rdCy3Yu1gb6FlOHlHSSINw=
-  file: bin/neph
+  file:
+    - packages/releases-$GIT_TAG.tar.gz
+    - packages/releases-$GIT_TAG.zip
   skip_cleanup: true
   on:
-    tags: true
-  overwrite: true
+    tags: false
+    branch: master
+    condition: "other conditions"
