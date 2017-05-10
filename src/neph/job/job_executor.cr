@@ -63,8 +63,9 @@ module Neph
     end
 
     def print_status(msg : String, prev_lines : Int32)
-      log "\e[#{prev_lines}A" if prev_lines > 0
-      log "\e[J#{msg}"
+      STDOUT.print "\e[#{prev_lines}A" if prev_lines > 0
+      STDOUT.print "\e[J#{msg}"
+      STDOUT.flush
     end
 
     def print_result
