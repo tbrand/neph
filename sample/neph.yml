@@ -28,6 +28,8 @@ sub0_1:
     true
 
 sub1:
+  command:
+    invalid
   depends_on:
     - sub1_1
     - sub1_2
