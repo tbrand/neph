@@ -23,7 +23,7 @@ module Neph
     property ignore_error : Bool = false
     property sources : Array(String) = [] of String
 
-    def initialize(@name : String, @command : String)
+    def initialize(@name : String, @command : String, @parent_job : Job?)
       @depends_on = [] of Job
       @ws_dir = "#{neph_dir}/#{@name}"
       @log_dir = "#{@ws_dir}/log"
@@ -125,6 +125,12 @@ module Neph
 
     def done?
       @status == DONE || @status == ERROR || @status == SKIP
+    end
+
+    def has_parent_job?(sub_job_name : String) : String?
+      return nil if @parent_job.nil?
+      return @name if @parent_job.not_nil!.name == sub_job_name
+      return @parent_job.not_nil!.has_parent_job?(sub_job_name)
     end
 
     def exec(channel : Channel(Job))
