@@ -1,0 +1,17 @@
+loop0:
+  command:
+    pwd
+  depends_on:
+    loop1
+
+loop1:
+  depends_on:
+    loop2
+
+loop2:
+  depends_on:
+    loop3
+
+loop3:
+  depends_on:
+    loop0

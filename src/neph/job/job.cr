@@ -23,7 +23,7 @@ module Neph
     property ignore_error : Bool = false
     property sources : Array(String) = [] of String
 
-    def initialize(@name : String, @command : String)
+    def initialize(@name : String, @command : String, @parent_job : Job?)
       @depends_on = [] of Job
       @ws_dir = "#{neph_dir}/#{@name}"
       @log_dir = "#{@ws_dir}/log"
@@ -125,6 +125,12 @@ module Neph
 
     def done?
       @status == DONE || @status == ERROR || @status == SKIP
+    end
+
+    def has_parent_job?(sub_job_name : String) : String?
+      return nil if @parent_job.nil?
+      return @name if @parent_job.not_nil!.name == sub_job_name
+      return @parent_job.not_nil!.has_parent_job?(sub_job_name)
     end
 
     def exec(channel : Channel(Job))
@@ -232,11 +238,22 @@ module Neph
         if sub_job.status_code != 0
           if !sub_job.ignore_error
             log_ln error("'#{sub_job.name}' failed with status code (#{sub_job.status_code})"), true
-            log_ln error("Error log exists at #{sub_job.log_dir}/#{log_err}"), true
+            log_ln error(" -- STDOUT(#{sub_job.log_dir}/#{log_out}) -- ")
+            log_ln file_tail("#{sub_job.log_dir}/#{log_out}")
+            log_ln error(" -- STDERR(#{sub_job.log_dir}/#{log_err}) -- ")
+            log_ln file_tail("#{sub_job.log_dir}/#{log_err}")
             exit -1
           end
         end
       end
+    end
+
+    def file_tail(path : String) : String
+      res = File.read(path).lines
+      if res.size > 10
+        res.shift(res.size - 10)
+      end
+      res.join('\n')
     end
 
     include Neph
