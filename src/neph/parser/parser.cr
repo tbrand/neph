@@ -10,7 +10,7 @@ module Neph
       job
     end
 
-    def create_job(config : YAML::Type, job_name : String) : Job
+    def create_job(config : YAML::Type, job_name : String, parent_job : Job? = nil) : Job
       unless config.is_a?(YHash)
         abort error("Invalid structure in '#{job_name}'")
       end
@@ -26,7 +26,7 @@ module Neph
                       ""
                     end
 
-      job = Job.new(job_name, job_command)
+      job = Job.new(job_name, job_command, parent_job)
       job.chdir = job_config["chdir"].as(String) if job_config.has_key?("chdir")
       job.ignore_error = if job_config["ignore_error"].as(String) == "true"
                            true
@@ -43,18 +43,30 @@ module Neph
           job.add_sources(source_files(job_config["sources"].as(String)))
         end
       end
-
+      
       if job_config.has_key?("depends_on")
         if job_config["depends_on"].is_a?(YArray)
           job_config["depends_on"].as(YArray).each do |sub_job_name|
-            job.add_sub_job(create_job(config, sub_job_name.as(String)))
+            add_sub_job(config, job, sub_job_name.as(String))
           end
         elsif job_config["depends_on"].is_a?(String)
-          job.add_sub_job(create_job(config, job_config["depends_on"].as(String)))
+          add_sub_job(config, job, job_config["depends_on"].as(String))
         end
       end
 
       job
+    end
+
+    def add_sub_job(config, job : Job, sub_job_name : String)
+      if sub_job_name == job.name
+        abort "Cannot specify same name jobs to 'depends_on' <- on '#{sub_job_name}' job"
+      end
+
+      if loop_job_name = job.has_parent_job?(sub_job_name)
+        abort "There are loop jobs between '#{sub_job_name}' and '#{loop_job_name}'"
+      end
+
+      job.add_sub_job(create_job(config, sub_job_name.as(String), job))
     end
 
     def source_files(path : String) : Array(String)
