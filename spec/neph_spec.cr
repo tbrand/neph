@@ -53,4 +53,14 @@ describe Neph do
     exec_neph("up_to_date.yml", "up_to_date")
     stdout_of("up_to_date").should_not eq(date)
   end
+
+  it "Cannot specify same name jobs" do
+    exec_neph("same_name_jobs.yml", "same")
+    stdout_of("same").should eq("")
+  end
+
+  it "Abort job when there is a loop jobs" do
+    exec_neph("loop_jobs.yml", "loop0")
+    stdout_of("loop0").should eq("")
+  end
 end
