@@ -238,11 +238,22 @@ module Neph
         if sub_job.status_code != 0
           if !sub_job.ignore_error
             log_ln error("'#{sub_job.name}' failed with status code (#{sub_job.status_code})"), true
-            log_ln error("Error log exists at #{sub_job.log_dir}/#{log_err}"), true
+            log_ln error(" -- STDOUT(#{sub_job.log_dir}/#{log_out}) -- ")
+            log_ln file_tail("#{sub_job.log_dir}/#{log_out}")
+            log_ln error(" -- STDERR(#{sub_job.log_dir}/#{log_err}) -- ")
+            log_ln file_tail("#{sub_job.log_dir}/#{log_err}")
             exit -1
           end
         end
       end
+    end
+
+    def file_tail(path : String) : String
+      res = File.read(path).lines
+      if res.size > 10
+        res.shift(res.size - 10)
+      end
+      res.join('\n')
     end
 
     include Neph
