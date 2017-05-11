@@ -3,8 +3,8 @@
 </h1>
 
 <p align="center">
-	[![Build Status](https://travis-ci.org/tbrand/neph.svg?branch=master)](https://travis-ci.org/tbrand/neph)
-	[![GitHub release](https://img.shields.io/github/release/tbrand/neph.svg)](https://github.com/tbrand/neph/releases)
+	<a href="https://travis-ci.org/tbrand/neph"><img src="https://travis-ci.org/tbrand/neph.svg?branch=master" alt="Latest version" /></a>
+	<a href="https://github.com/tbrand/neph/releases"><img src="https://img.shields.io/github/release/tbrand/neph.svg" alt="Latest version" /></a>
 </p>
 
 ---
