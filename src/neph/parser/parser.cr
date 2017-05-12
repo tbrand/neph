@@ -62,8 +62,8 @@ module Neph
         abort "Cannot specify same name jobs to 'depends_on' <- on '#{sub_job_name}' job"
       end
 
-      if loop_job_name = job.has_parent_job?(sub_job_name)
-        abort "There are loop jobs between '#{sub_job_name}' and '#{loop_job_name}'"
+      if job.has_parent_job?(sub_job_name)
+        abort "There are loop jobs between '#{sub_job_name}' and '#{job.name}'"
       end
 
       job.add_sub_job(create_job(config, sub_job_name.as(String), job))
