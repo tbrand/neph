@@ -1,0 +1,15 @@
+import:
+  - spec/configs/imported0.yml
+  - spec/configs/imported1.yml
+
+import_main:
+  command:
+    echo "OK from import_main"
+  depends_on:
+    - imported0
+    - imported1
+    - import0
+
+import0:
+  command:
+    echo "OK from import0"

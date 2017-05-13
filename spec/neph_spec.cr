@@ -63,4 +63,18 @@ describe Neph do
     exec_neph("loop_jobs.yml", "loop0")
     stdout_of("loop0").should eq("")
   end
+
+  it "import feature (Specify single import)" do
+    exec_neph("import_single.yml", "import_single")
+    stdout_of("import_single").should eq("OK from import_single\n")
+    stdout_of("imported_single").should eq("OK from imported_single\n")
+  end
+
+  it "import feature (Specify multiple imports)" do
+    exec_neph("import.yml", "import_main")
+    stdout_of("import_main").should eq("OK from import_main\n")
+    stdout_of("import0").should eq("OK from import0\n")
+    stdout_of("imported0").should eq("OK from imported0\n")
+    stdout_of("imported1").should eq("OK from imported1\n")
+  end
 end

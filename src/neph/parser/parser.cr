@@ -1,20 +1,55 @@
 module Neph
   module Parser
-    def parse_yaml(job_name : String, path : String) : Job
-      abort error("config file doesn't exist at #{path}") unless File.exists?(path)
+    def parse_yaml(path : String) : YAML::Type
+      abort error("yaml doesn't exist at #{path}") unless File.exists?(path)
       abort error("#{path} is not a file") unless File.file?(path)
 
       config = YAML.parse(File.read(path)).as_h
+
+      unless config.is_a?(YHash)
+        abort error("Invalid structure in '#{path}'")
+      end
+
+      config
+    end
+    
+    def parse_yaml(job_name : String, path : String) : Job
+      # abort error("config file doesn't exist at #{path}") unless File.exists?(path)
+      # abort error("#{path} is not a file") unless File.file?(path)
+
+      # config = YAML.parse(File.read(path)).as_h
+
+      # unless config.is_a?(YHash)
+      #   abort error("Invalid structure in '#{job_name}'")
+      # end
+
+      # if config.has_key?("import")
+      #   if config["import"].is_a?(YArray)
+      #     config["import"].as(YArray).each do |import|
+      #       YAML.parse(File.read(import.as(String)))
+      #     end
+      #   elsif config["import"].is_a?(String)
+      #     
+      #   end
+      # end
+
+      config = parse_yaml(path)
+
+      if config.has_key?("import")
+        if config["import"].is_a?(YArray)
+          config["import"].as(YArray).each do |import|
+            config.merge!(parse_yaml(import.as(String)))
+          end
+        elsif config["import"].is_a?(String)
+          config.merge!(parse_yaml(config["import"].as(String)))
+        end
+      end
 
       job = create_job(config, job_name)
       job
     end
 
     def create_job(config : YAML::Type, job_name : String, parent_job : Job? = nil) : Job
-      unless config.is_a?(YHash)
-        abort error("Invalid structure in '#{job_name}'")
-      end
-
       unless config.has_key?(job_name)
         abort error("'#{job_name}' is not found")
       end

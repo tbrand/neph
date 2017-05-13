@@ -82,7 +82,6 @@ hello:
   command:
     echo "Hello!"
 ```
-
 Here `main` job depends on `hello`. So when you execute `neph`, `hello` job is triggered before the execution of the `main` job.
 
 You can ignore errors by `ignore_error: true`
@@ -98,7 +97,7 @@ hello:
   ignore_error:
     true
 ```
-In this jobs, hello job will raise an error since `hogehoge` command doesn't exist. But main job will be triggered by ignoring the error.
+In this jobs, hello job will raise an error since `hogehoge` command doesn't exist. But main job will be triggered.
 
 You can specify sources by `sources:` for the jobs like `make` command.
 ```yaml
@@ -116,6 +115,22 @@ hello:
     true
 ```
 If the sources are not updated, the job will be skipped.
+
+You can import other configurations by
+```yaml
+import:
+  - import_config.yml
+
+main:
+  depends_on:
+    import_config_job
+```
+where `import_config.yml` is
+```yaml
+import_config_job:
+  command:
+    echo "OK!"
+```
 
 See [sample](https://github.com/tbrand/neph/blob/master/sample/neph.yml) for details.
 
