@@ -1,0 +1,8 @@
+import:
+  spec/configs/imported_single.yml
+
+import_single:
+  command:
+    echo "OK from import_single"
+  depends_on:
+    imported_single

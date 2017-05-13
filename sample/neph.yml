@@ -12,10 +12,6 @@ sub0:
   command: |
     sleep 1
     sleep 1
-    sleep 1
-    sleep 1
-    sleep 1
-    sleep 1
   depends_on:
     sub0_1
   chdir:
