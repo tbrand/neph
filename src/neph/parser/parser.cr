@@ -59,7 +59,7 @@ module Neph
           job.add_sources(source_files(job_config["src"].as(String)))
         end
       end
-      
+
       if job_config.has_key?("depends_on")
         if job_config["depends_on"].is_a?(YArray)
           job_config["depends_on"].as(YArray).each do |sub_job_name|
