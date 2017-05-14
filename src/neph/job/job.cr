@@ -127,9 +127,9 @@ module Neph
       @status == DONE || @status == ERROR || @status == SKIP
     end
 
-    def has_parent_job?(sub_job_name : String) : String?
-      return nil if @parent_job.nil?
-      return @name if @parent_job.not_nil!.name == sub_job_name
+    def has_parent_job?(sub_job_name : String) : Bool
+      return false if @parent_job.nil?
+      return true if @parent_job.not_nil!.name == sub_job_name
       return @parent_job.not_nil!.has_parent_job?(sub_job_name)
     end
 

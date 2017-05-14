@@ -49,5 +49,6 @@ puts `git config --global user.name "Travis CI"`
 puts `git config --global user.email "travis@travis-ci.org"`
 puts `git commit -m "[skip ci] bumped version #{@new_version}"`
 puts `git push https://#{ENV['GH_TOKEN']}@github.com/tbrand/neph.git HEAD:master`
+puts `git push https://#{ENV['GH_TOKEN']}@github.com/tbrand/neph.git HEAD:release`
 puts `git tag #{tag} -a -m "Release from Travis CI for build number $TRAVIS_BUILD_NUMBER"`
 puts `git push --quiet https://#{ENV['GH_TOKEN']}@github.com/tbrand/neph.git --tags 2> /dev/null`
