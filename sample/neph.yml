@@ -17,7 +17,7 @@ sub0:
     sleep 1
   depends_on:
     sub0_1
-  chdir:
+  dir:
     sample
 
 sub0_1:
@@ -46,7 +46,7 @@ sub1_2:
 sub2:
   command:
     sleep 5
-  sources:
+  src:
     - src/**/*.cr
 
 sub3:
