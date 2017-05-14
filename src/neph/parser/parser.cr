@@ -14,25 +14,6 @@ module Neph
     end
     
     def parse_yaml(job_name : String, path : String) : Job
-      # abort error("config file doesn't exist at #{path}") unless File.exists?(path)
-      # abort error("#{path} is not a file") unless File.file?(path)
-
-      # config = YAML.parse(File.read(path)).as_h
-
-      # unless config.is_a?(YHash)
-      #   abort error("Invalid structure in '#{job_name}'")
-      # end
-
-      # if config.has_key?("import")
-      #   if config["import"].is_a?(YArray)
-      #     config["import"].as(YArray).each do |import|
-      #       YAML.parse(File.read(import.as(String)))
-      #     end
-      #   elsif config["import"].is_a?(String)
-      #     
-      #   end
-      # end
-
       config = parse_yaml(path)
 
       if config.has_key?("import")
@@ -62,23 +43,23 @@ module Neph
                     end
 
       job = Job.new(job_name, job_command, parent_job)
-      job.chdir = job_config["chdir"].as(String) if job_config.has_key?("chdir")
+      job.dir = job_config["dir"].as(String) if job_config.has_key?("dir")
       job.ignore_error = if job_config["ignore_error"].as(String) == "true"
                            true
                          else
                            false
                          end if job_config.has_key?("ignore_error")
 
-      if job_config.has_key?("sources")
-        if job_config["sources"].is_a?(YArray)
-          job_config["sources"].as(YArray).each do |source|
+      if job_config.has_key?("src")
+        if job_config["src"].is_a?(YArray)
+          job_config["src"].as(YArray).each do |source|
             job.add_sources(source_files(source.as(String)))
           end
         else
-          job.add_sources(source_files(job_config["sources"].as(String)))
+          job.add_sources(source_files(job_config["src"].as(String)))
         end
       end
-      
+
       if job_config.has_key?("depends_on")
         if job_config["depends_on"].is_a?(YArray)
           job_config["depends_on"].as(YArray).each do |sub_job_name|
