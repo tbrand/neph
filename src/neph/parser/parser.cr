@@ -14,25 +14,6 @@ module Neph
     end
     
     def parse_yaml(job_name : String, path : String) : Job
-      # abort error("config file doesn't exist at #{path}") unless File.exists?(path)
-      # abort error("#{path} is not a file") unless File.file?(path)
-
-      # config = YAML.parse(File.read(path)).as_h
-
-      # unless config.is_a?(YHash)
-      #   abort error("Invalid structure in '#{job_name}'")
-      # end
-
-      # if config.has_key?("import")
-      #   if config["import"].is_a?(YArray)
-      #     config["import"].as(YArray).each do |import|
-      #       YAML.parse(File.read(import.as(String)))
-      #     end
-      #   elsif config["import"].is_a?(String)
-      #     
-      #   end
-      # end
-
       config = parse_yaml(path)
 
       if config.has_key?("import")
