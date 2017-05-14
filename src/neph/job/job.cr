@@ -151,6 +151,15 @@ module Neph
         else
           clean_tmp
           @status = ERROR
+
+          unless @ignore_error
+            log_ln error("'#{@name}' failed with status code (#{@status_code})"), true
+            log_ln error(" -- STDOUT(#{@log_dir}/#{log_out}) -- ")
+            log_ln file_tail("#{@log_dir}/#{log_out}")
+            log_ln error(" -- STDERR(#{@log_dir}/#{log_err}) -- ")
+            log_ln file_tail("#{@log_dir}/#{log_err}")
+            exit -1
+          end
         end
       end
 
@@ -234,17 +243,7 @@ module Neph
       end
 
       depends_on.each do |_|
-        sub_job = channel.receive
-        if sub_job.status_code != 0
-          if !sub_job.ignore_error
-            log_ln error("'#{sub_job.name}' failed with status code (#{sub_job.status_code})"), true
-            log_ln error(" -- STDOUT(#{sub_job.log_dir}/#{log_out}) -- ")
-            log_ln file_tail("#{sub_job.log_dir}/#{log_out}")
-            log_ln error(" -- STDERR(#{sub_job.log_dir}/#{log_err}) -- ")
-            log_ln file_tail("#{sub_job.log_dir}/#{log_err}")
-            exit -1
-          end
-        end
+        channel.receive
       end
     end
 
