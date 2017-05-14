@@ -22,6 +22,12 @@ at installed directory.
 
 Neph is written in Crystal, so you need Crystal to install Neph. To install Crystal, see [official manual](https://github.com/crystal-lang/crystal).
 
+To install neph, run following command
+```bash
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/release/tools/install.rb)"
+```
+
+### Install neph manually
 Cloning this project
 ```bash
 git clone https://github.com/tbrand/neph

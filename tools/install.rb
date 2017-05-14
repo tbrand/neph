@@ -14,7 +14,7 @@ usr_local_bin = "/usr/local/bin"
 
 FileUtils.rm_rf(tmp_neph) if Dir.exist?(tmp_neph)
 
-`git clone https://github.com/tbrand/neph #{tmp_neph}`
+`git clone -b release https://github.com/tbrand/neph #{tmp_neph}`
 
 puts "Building neph..."
 
