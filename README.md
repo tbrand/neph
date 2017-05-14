@@ -105,14 +105,14 @@ hello:
 ```
 In this jobs, hello job will raise an error since `hogehoge` command doesn't exist. But main job will be triggered.
 
-You can specify sources by `sources:` for the jobs like `make` command.
+You can specify sources by `src:` for the jobs like `make` command.
 ```yaml
 main:
   command:
     echo "Main!"
   depends_on:
     - hello
-  sources:
+  src:
     - src/test.c
 hello:
   command:

@@ -19,9 +19,9 @@ module Neph
     getter done_command    : Int32 = 0
     getter commands        : Array(String) = [] of String
 
-    property chdir : String = Dir.current
+    property dir : String = Dir.current
+    property src : Array(String) = [] of String
     property ignore_error : Bool = false
-    property sources : Array(String) = [] of String
 
     def initialize(@name : String, @command : String, @parent_job : Job?)
       @depends_on = [] of Job
@@ -43,7 +43,7 @@ module Neph
 
     def add_sources(source_files : Array(String))
       source_files.each do |file|
-        @sources.push(file)
+        @src.push(file)
       end
     end
 
@@ -158,16 +158,16 @@ module Neph
     end
 
     def clean_tmp
-      @sources.each do |source|
+      @src.each do |source|
         File.delete(tmp_file(source)) if File.exists?(tmp_file(source))
       end
     end
 
     def up_to_date? : Bool
-      return false if @sources.size == 0
+      return false if @src.size == 0
 
       res = true
-      @sources.each do |source|
+      @src.each do |source|
         stat = File.stat(source)
 
         if File.exists?(tmp_file(source))
@@ -207,7 +207,7 @@ module Neph
             shell: true,
             output: stdout,
             error: stderr,
-            chdir: @chdir
+            chdir: @dir
           )
 
           @done_command += 1

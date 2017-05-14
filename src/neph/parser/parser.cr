@@ -43,20 +43,20 @@ module Neph
                     end
 
       job = Job.new(job_name, job_command, parent_job)
-      job.chdir = job_config["chdir"].as(String) if job_config.has_key?("chdir")
+      job.dir = job_config["dir"].as(String) if job_config.has_key?("dir")
       job.ignore_error = if job_config["ignore_error"].as(String) == "true"
                            true
                          else
                            false
                          end if job_config.has_key?("ignore_error")
 
-      if job_config.has_key?("sources")
-        if job_config["sources"].is_a?(YArray)
-          job_config["sources"].as(YArray).each do |source|
+      if job_config.has_key?("src")
+        if job_config["src"].is_a?(YArray)
+          job_config["src"].as(YArray).each do |source|
             job.add_sources(source_files(source.as(String)))
           end
         else
-          job.add_sources(source_files(job_config["sources"].as(String)))
+          job.add_sources(source_files(job_config["src"].as(String)))
         end
       end
       
