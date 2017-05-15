@@ -62,18 +62,37 @@ module Neph
 
       if job_config.has_key?("depends_on")
         if job_config["depends_on"].is_a?(YArray)
-          job_config["depends_on"].as(YArray).each do |sub_job_name|
-            add_sub_job(config, job, sub_job_name.as(String))
+          job_config["depends_on"].as(YArray).each do |sub_job|
+            abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray|Nil)
+            add_sub_job(config, job, sub_job.as(String|YHash))
           end
-        elsif job_config["depends_on"].is_a?(String)
-          add_sub_job(config, job, job_config["depends_on"].as(String))
+        else
+          sub_job = job_config["depends_on"]
+          abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray|Nil)
+          add_sub_job(config, job, sub_job.as(String|YHash))
         end
       end
 
       job
     end
 
-    def add_sub_job(config, job : Job, sub_job_name : String)
+    def add_sub_job(config : YHash, job : Job, sub_job : String)
+      add_sub_job(config, job, sub_job, nil)
+    end
+
+    def add_sub_job(config : YHash, job : Job, sub_job : YHash)
+      unless sub_job.has_key?("job")
+        abort "Please specify 'job' for the #{job.name}'s dependency"
+      end
+
+      if sub_job.has_key?("env")
+        add_sub_job(config, job, sub_job["job"].as(String), sub_job["env"].as(String))
+      else
+        add_sub_job(config, job, sub_job["job"].as(String), nil)
+      end
+    end
+
+    def add_sub_job(config : YHash, job : Job, sub_job_name : String, env : String?)
       if sub_job_name == job.name
         abort "Cannot specify same name jobs to 'depends_on' <- on '#{sub_job_name}' job"
       end
@@ -82,7 +101,7 @@ module Neph
         abort "There are loop jobs between '#{sub_job_name}' and '#{job.name}'"
       end
 
-      job.add_sub_job(create_job(config, sub_job_name.as(String), job))
+      job.add_sub_job(create_job(config, sub_job_name, job), env)
     end
 
     def source_files(path : String) : Array(String)
