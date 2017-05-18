@@ -1,4 +1,4 @@
-# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/release/tools/copy_tmp_neph.rb)"
+# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/copy_tmp_neph.rb)"
 
 require "fileutils"
 

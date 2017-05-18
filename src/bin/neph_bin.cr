@@ -16,7 +16,7 @@ class NephBin
   
   def parse_option!
     OptionParser.parse! do |parser|
-      parser.banner = "Usage: neph [options]"
+      parser.banner = "Basic usage: neph [options]"
 
       parser.on(
         "-j JOB",
@@ -45,6 +45,9 @@ class NephBin
 
       parser.on("-h", "--help", "Show this help") do
         log_ln parser.to_s
+        log_ln "Action: neph [action]"
+        log_ln "    neph clean     - Cleaning every caches"
+        log_ln "    neph uninstall - Uninstalling neph command"
         exit 0
       end
 
