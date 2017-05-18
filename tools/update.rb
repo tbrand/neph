@@ -1,4 +1,4 @@
-# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/install.rb)"
+``# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/update.rb)"
 
 # env_check.rb
 puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/env_check.rb)"`
@@ -22,3 +22,4 @@ end
 
 # copy_tmp_neph
 puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/copy_tmp_neph.rb)"`
+

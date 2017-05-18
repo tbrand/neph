@@ -2,6 +2,9 @@
 
 require "fileutils"
 
+tmp_neph = "/tmp/neph"
+usr_local_bin = "/usr/loca/bin"
+
 puts "Install neph into #{usr_local_bin}"
 
 Dir.mkdir(usr_local_bin) unless Dir.exist?(usr_local_bin)
