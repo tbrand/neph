@@ -59,9 +59,6 @@ class NephBin
             log_ln "Neph".colorize.fore(:green).mode(:bold).to_s + " will be uninstalled ..."
             uninstall
             exit 0
-          when "update"
-            log_ln "Neph".colorize.fore(:green).mode(:bold).to_s + " will be updated ..."
-            exit 0
           end
         end
       end
@@ -69,7 +66,7 @@ class NephBin
   end
 
   def clean
-    FileUtils.rm_rf(NEPH_DIR)
+    FileUtils.rm_rf(NEPH_DIR) if Dir.exists?(NEPH_DIR)
   end
 
   def uninstall
@@ -92,10 +89,6 @@ class NephBin
         end
       end
     end
-  end
-
-  def update
-    puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/update.rb)"`
   end
 
   def exec

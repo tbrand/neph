@@ -3,7 +3,7 @@
 require "fileutils"
 
 tmp_neph = "/tmp/neph"
-usr_local_bin = "/usr/loca/bin"
+usr_local_bin = "/usr/local/bin"
 
 puts "Install neph into #{usr_local_bin}"
 

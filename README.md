@@ -21,7 +21,7 @@ Neph is written in Crystal, so you need Crystal to install Neph. To install Crys
 
 To install neph, run following command
 ```bash
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/release/tools/install.rb)"
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/install.rb)"
 ```
 
 ## Usage
