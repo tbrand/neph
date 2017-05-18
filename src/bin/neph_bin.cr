@@ -95,7 +95,7 @@ class NephBin
   end
 
   def update
-    
+    puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/update.rb)"`
   end
 
   def exec
