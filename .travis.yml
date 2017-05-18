@@ -7,7 +7,7 @@ install:
   shards build --release
 
 script:
-  neph -j test
+  ./bin/neph -j test
 
 before_deploy:
   - ruby bump.rb
