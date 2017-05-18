@@ -3,3 +3,7 @@ main:
     shards build --release
   src:
     - src/**/*.cr
+
+test:
+  command:
+    crystal spec
