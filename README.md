@@ -34,6 +34,7 @@ Wiki is also maintained as a document. Here is a full features.
  - [Working directory](https://github.com/tbrand/neph/wiki/Working-directory)
  - [Specify sources](https://github.com/tbrand/neph/wiki/Specify-sources)
  - [Ignoring errors](https://github.com/tbrand/neph/wiki/Ignoring-errors)
+ - [Set a job result to env vars](https://github.com/tbrand/neph/wiki/Set-a-job-result-to-env-vars)
  - [Import other configurations](https://github.com/tbrand/neph/wiki/Import-other-configurations)
  - [Command line options](https://github.com/tbrand/neph/wiki/Command-line-options)
  - [Log locations](https://github.com/tbrand/neph/wiki/Log-locations)
