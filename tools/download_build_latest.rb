@@ -1,4 +1,4 @@
-# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/release/tools/download_build_latest.rb)"
+# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/download_build_latest.rb)"
 
 require "fileutils"
 

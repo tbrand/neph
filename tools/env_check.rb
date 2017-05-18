@@ -1,4 +1,4 @@
-# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/release/tools/env_check.rb)"
+# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/env_check.rb)"
 
 def check_cmd(cmd)
   puts "Checking #{cmd} ..."

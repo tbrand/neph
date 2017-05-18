@@ -1,3 +1,5 @@
+# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/install.rb)"
+
 require "fileutils"
 
 # def check_cmd(cmd)
@@ -10,7 +12,7 @@ require "fileutils"
 # abort "Failed to find `shards` command (https://github.com/crystal-lang/shards)" unless check_cmd("shards")
 
 # env_check.rb
-puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/release/tools/env_check.rb)"`
+puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/env_check.rb)"`
 
 # tmp_neph = "/tmp/neph"
 # usr_local_bin = "/usr/local/bin"
@@ -24,7 +26,7 @@ puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/ne
 # `cd #{tmp_neph}; shards build --release`
 
 # download_build_stable
-puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/release/tools/download_build_stable.rb)"`
+puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/download_build_stable.rb)"`
 
 # puts "Install neph into #{usr_local_bin}"
 #  
@@ -43,4 +45,4 @@ puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/ne
 # puts "If `neph` is not found, please do `export $PATH=$PATH:/usr/local/bin`"
 
 # copy_tmp_neph
-puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/release/tools/copy_tmp_neph.rb)"`
+puts `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/copy_tmp_neph.rb)"`
