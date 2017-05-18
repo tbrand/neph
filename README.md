@@ -38,7 +38,7 @@ Wiki is also maintained as a document. Here is a full features.
  - [Command line options](https://github.com/tbrand/neph/wiki/Command-line-options)
  - [Log locations](https://github.com/tbrand/neph/wiki/Log-locations)
 
-## Used in
+## Use cases
 
 Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest). In `which_is_the_fastest`, building time is **reduced from 102[sec] to 33[sec]**. [neph.yml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yml) is here.
 
