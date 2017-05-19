@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-	<a href="https://travis-ci.org/tbrand/neph"><img src="https://travis-ci.org/tbrand/neph.svg?branch=master?style=flat" alt="Latest version" /></a>
+	<a href="https://travis-ci.org/tbrand/neph"><img src="https://travis-ci.org/tbrand/neph.svg?branch=master&style=flat" alt="Latest version" /></a>
 	<a href="https://github.com/tbrand/neph/releases"><img src="https://img.shields.io/github/release/tbrand/neph.svg?style=flat" alt="Latest version" /></a>
 	<a href="https://raw.githubusercontent.com/tbrand/neph/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat" /></a>
 	<a href="https://github.com/tbrand/neph/wiki"><img src="https://img.shields.io/badge/Document-wiki-blue.svg?style=flat" /></a>
