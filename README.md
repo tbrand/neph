@@ -10,10 +10,12 @@
 	<a href="https://github.com/tbrand/neph/issues"><img src="https://img.shields.io/github/issues/tbrand/neph.svg?style=flat" /></a>
 </p>
 
+<p align="center">
+	<img src="https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif" width="600" />
+</p>
+
 A modern command line job processor written in Crystal that can execute jobs concurrently. :rocket:  
 Neph can be substitute for `make` command. :rocket:  
-
-<img src="https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif" width="600" />  
 
 ## Installation
 
