@@ -37,7 +37,8 @@ sub_sub_job1:
   ignore_error:
     true
   depends_on:
-    specify_sources
+    - specify_sources
+    - print_result
 
 specify_sources:
   command: |
@@ -49,3 +50,15 @@ specify_sources:
     - src/**/*.cr
   depends_on:
     outside_job
+
+print_result:
+  command:
+    echo "The result is $RESULT!"
+  depends_on:
+    -
+      job: ruby_job
+      env: RESULT
+
+ruby_job:
+  command:
+    ruby -e 'print 1 + 5'

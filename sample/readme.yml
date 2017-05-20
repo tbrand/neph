@@ -1,0 +1,36 @@
+main:
+  command:
+    sleep 0.8
+  depends_on:
+    - sub_job0
+    - sub_job1
+    - sub_job2
+
+sub_job0:
+  command:
+    sleep 1
+  depends_on:
+    - sub_sub_job0
+    - sub_sub_job1
+
+sub_job1:
+  command:
+    sleep 1.2
+  depends_on:
+    sub_sub_job2
+
+sub_job2:
+  command:
+    sleep 1.4
+
+sub_sub_job0:
+  command:
+    sleep 0.6
+
+sub_sub_job1:
+  command:
+    sleep 0.8
+
+sub_sub_job2:
+  command:
+    sleep 1
