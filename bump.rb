@@ -1,3 +1,8 @@
+unless ENV['TRAVIS_OS_NAME'] == 'osx'
+  puts "Skip bump since os is #{ENV['TRAVIS_OS_NAME']}"
+  return
+end
+
 @current_version = ""
 @new_version = ""
 
