@@ -1,4 +1,7 @@
 language: crystal
+
+os: osx
+
 crystal:
   - latest
 
