@@ -1,4 +1,7 @@
 language: crystal
+crystal:
+  - latest
+
 env:
   global:
   - secure: QnlssHorLhdtTQXH6AQD6lTaZV7cIHq4aH35yG2c7YizLGo6RcssCTSuIhnfB35tu0tgbCSlCGZyA6hUg3CQzvgSbflAo2JiY2q/1jyLUuPJRtH+rw1k14/gKqxLvQdh7Fh83MIivusaF7lej5O+IIbKZodtFreyRqD4Qu0JUQwNC2vtGyQVBU192mJ/1aQM2xp9xs92ZOQpkP0iXsGufHfQPZse6ZH0FpHHgz3ThWnb3qPm/Hy/FXXvoGkNC6c6VSUUgHPReHfipLtQOIptA8LJdqOcHfurMrvhoCZHLEWusDT2rR6aHTpoBTS2faeEllGtKhsi5xjky1UfG3/vjoiduMz0E91uK4kcpxHwQPGf8ZDSK8elb+/zNwogGmDBmgnPjqmeibzUmWxViXIKMXp5Vo7MM4SUUQUmjORKE3Eaf8ddfa8HkuGTjjP/Z+NuoYGvtCmjGpiKWIdRnTWo7ScKsaV0hAkNPq7Bm8LyAw2Ia1XrCvO6JRdYQYIkqgw+cT2TkpjREle8AcPYxT0OWfsHRlI1MI44ZZSgiTk6YVRmm0K8Vg0JHfjSWFVKt/eClM3nMDyYYst51aKb8XACo30B4l9noUvVKYLYRxU8EJ4VtTOfVW/VFDhAPoHxI8XZ7e/nlFAkr9G67agpCYm/oGGmty+7TlvalQeMcD2RW9Q=
@@ -11,17 +14,10 @@ script:
 
 before_deploy:
   - ruby bump.rb
-  - mkdir packages
-  - tar czf packages/releases.tar.gz $(ls -I packages)
-  - zip -q packages/releases.zip -r $(ls -I packages)
 deploy:
   provider: releases
   api_key:
     secure: U+m/LSx7thnItJcE1HVwvTJsq2GHkIeO4GWbzHGolty35GOWgYsG8EAVrvchK+Qfw8OCBUBiC5ErDWiXS4HPczUCyEbvIPGFS55DhXxCfyjIq//wKaYQeRJZ9DvHUMePVkbT1+Z7GwVI+I9YUAnQink625d+CVmiCPFBTT6zxcwslKq+bR6X25c/OACwdXH1Cm+VTQ77TqcTgsBI+Ru/HpLaEN1eopIux7FTvgFqsQF/Wm47Defwe18W10C9A0rGJKo3Jy1vZvpzg6hi5E5gJyrIY+6Nvj5JXDni0qmPk9iq/VVKaMp446Mo0O52rX69W2yYCE4MeGWhlw5hIokBkHUtRk1qxp3oyh+QHr8+925g/gGK88vi7C5T2WMxpk9f6DC33OoaXlNwVKJOVVfmF+SehcD2LiJhZT9gXKcW6V0KqYot71rDbIQx7BVwK1MGENrvpTX2beevQHhVoTygM76bTTc19yEqPFI69wDwX6RaTPTE6DWuOufxTpW53L00h9y8ccX19tYF6MZ9ny6ZM/YlJ71chCYVRubmwik6sSHSmDhaW+iT8R/Pw8bn51+/7z4+4RupQyDWll7wwrWP9iHhWRBGGvSyKwOCtm+cLK8nHzgJp7fRLujswHgByIL77pGnpMeAJdEqKf5FiS4mjwO+8Z1lU1NgDLSkXH0O7KY=
-  file:
-  - packages/releases.tar.gz
-  - packages/releases.zip
-  skip_cleanup: true
   on:
     tags: false
     branch: release
