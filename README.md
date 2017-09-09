@@ -19,12 +19,7 @@ Neph can be substitute for `make` command. :rocket:
 
 ## Installation
 
-Neph is written in Crystal, so you need Crystal to install Neph. To install Crystal, see [official manual](https://github.com/crystal-lang/crystal).
-
-To install neph, run following command
-```bash
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/master/tools/install.rb)"
-```
+WIP. If you have `crystal` in your environment, you can build by `shards build`.
 
 ## Usage
 

@@ -16,7 +16,7 @@ script:
   ./bin/neph -j test
 
 before_deploy:
-  - ruby bump.rb
+  - ruby ci/release.rb
 deploy:
   provider: releases
   api_key:
