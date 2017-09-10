@@ -11,11 +11,12 @@
 </p>
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif" width="600" />
+	<img src="https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif" width="700" />
 </p>
 
-A modern command line job processor written in Crystal that can execute jobs concurrently. :rocket:  
-Neph can be substitute for `make` command. :rocket:  
+1. A modern command line job processor written in Crystal :rocket:  
+2. Can execute jobs concurrently. :rocket:  
+3. Can be substitute for `make` command. :rocket:  
 
 ## Installation
 
@@ -39,7 +40,9 @@ Wiki is also maintained as a document. Here is a full features.
 
 ## Use cases
 
-Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest). In `which_is_the_fastest`, building time is **reduced from 102[sec] to 33[sec]**. [neph.yml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yml) is here.
+Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest). In `which_is_the_fastest`.  
+The building time is **reduced from 102[sec] to 33[sec]**.  
+The [neph.yml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yml) is here.
 
 ## Contributing
 
