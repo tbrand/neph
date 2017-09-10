@@ -35,6 +35,7 @@ Wiki is also maintained as a document. Here is a full features.
  - [Import other configurations](https://github.com/tbrand/neph/wiki/Import-other-configurations)
  - [Command line options](https://github.com/tbrand/neph/wiki/Command-line-options)
  - [Log locations](https://github.com/tbrand/neph/wiki/Log-locations)
+ - [Log modes](https://github.com/tbrand/neph/wiki/Log-modes)
 
 ## Use cases
 

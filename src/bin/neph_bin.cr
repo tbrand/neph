@@ -9,7 +9,8 @@ class NephBin
 
   def initialize
     ready_dir
-    
+
+    @mode = "NORMAL"
     @job_name = JOB_NAME
     @config_path = CONFIG_PATH
   end
@@ -34,8 +35,13 @@ class NephBin
         @config_path = config_path
       end
 
-      parser.on("-q", "--quiet", "Quiet mode, print out nothing") do
-        @quiet = true
+      parser.on("-m MODE", "--mode=MODE", "Log modes [NORMAL/CI/QUIET] (Default is NORMAL)") do |mode|
+        if mode != "NORMAL" && mode != "CI" && mode != "QUIET"
+          log_ln "Please select mode from one of NORMAL, CI or QUIET."
+          exit -1
+        end
+
+        @mode = mode
       end
 
       parser.on("-v", "--version", "Show the version") do
@@ -98,7 +104,7 @@ class NephBin
     main_job = parse_yaml(@job_name, @config_path)
 
     job_executor = JobExecutor.new(main_job)
-    job_executor.exec
+    job_executor.exec(@mode)
   end
 
   include Neph

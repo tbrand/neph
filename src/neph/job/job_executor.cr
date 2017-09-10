@@ -3,7 +3,7 @@ module Neph
 
     def initialize(@job : Job); end
 
-    def exec
+    def exec(@mode : String)
       channel = Channel(Job).new
       @start = Time.now
 
@@ -41,6 +41,17 @@ module Neph
     end
 
     def print_status
+      case @mode
+      when "NORMAL"
+        print_status_normal
+      when "CI"
+        print_status_ci
+      when "QUIET"
+        print_status_quiet
+      end
+    end
+
+    def print_status_normal
       prev_lines = 0
 
       loop do
@@ -52,6 +63,26 @@ module Neph
           break
         end
 
+        sleep STATUS_CHECK_INTERVAL
+      end
+    end
+
+    def print_status_ci
+      loop do
+        print @job.to_s_ci
+
+        if @job.done?
+          print_result
+          break
+        end
+
+        sleep STATUS_CHECK_INTERVAL
+      end
+    end
+
+    def print_status_quiet
+      loop do
+        break if @job.done?
         sleep STATUS_CHECK_INTERVAL
       end
     end
