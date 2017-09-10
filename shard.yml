@@ -8,6 +8,6 @@ targets:
     neph:
       main: src/bin/neph_bin.cr
 
-crystal: 0.22.0
+crystal: 0.23.1
 
 license: MIT

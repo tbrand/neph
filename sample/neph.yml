@@ -1,55 +1,64 @@
+# You can import jobs from other configuration file
 import:
-  sample/imported.yml
+  sample/outside_configuration.yml
 
 main:
   command: |
-    sleep 0.5
-    hostname
+    echo "This is a Main job!!"
+    echo "Main job depends on sub_job"
+    sleep 0.2
   depends_on:
-    - sub0
-    - sub2
-    - sub1
-    - sub3
+    sub_job
 
-sub0:
+sub_job:
   command: |
-    sleep 1
-    sleep 1
+    echo "This is a sub job for main job"
+    echo "You can define multiple dependencies like this"
+    sleep 0.2
   depends_on:
-    sub0_1
+    - sub_sub_job0
+    - sub_sub_job1
+
+sub_sub_job0:
+  command: |
+    echo "Working on ./sample directory"
+    pwd
+    echo "Check the 'pwd' result at .neph/sub_sub_job0/log/log.out"
+    sleep 0.2
   dir:
     sample
 
-sub0_1:
-  command:
-    sleep 0.4
+sub_sub_job1:
+  command: |
+    echo "This job raises an error since 'hoge' command doesn't exist"
+    echo "But job will proceed since the error will be ignored"
+    sleep 0.2
+    hoge
   ignore_error:
     true
-
-sub1:
-  command:
-    sleep 0.1
   depends_on:
-    - sub1_1
-    - sub1_2
+    - specify_sources
+    - print_result
 
-sub1_1:
-  command:
-    sleep 3.2
-  depends_on:
-    sub_imported
-
-sub1_2:
-  command:
-    sleep 1.3
-
-sub2:
-  command:
-    sleep 5
+specify_sources:
+  command: |
+    echo "This job will not be triggered if the sources are not updated"
+    echo "The feature is inspired by make command"
+    echo "'outside_job' is defined at sample/outside_configuration.yml"
+    sleep 0.2
   src:
     - src/**/*.cr
+  depends_on:
+    outside_job
 
-sub3:
+print_result:
   command:
-    sleep 3.4
+    echo "The result is $RESULT!"
+  depends_on:
+    -
+      job: ruby_job
+      env: RESULT
 
+ruby_job:
+  command:
+    ruby -e 'print 1 + 5'

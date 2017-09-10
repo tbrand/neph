@@ -3,144 +3,40 @@
 </h1>
 
 <p align="center">
-	<a href="https://travis-ci.org/tbrand/neph"><img src="https://travis-ci.org/tbrand/neph.svg?branch=master" alt="Latest version" /></a>
-	<a href="https://github.com/tbrand/neph/releases"><img src="https://img.shields.io/github/release/tbrand/neph.svg" alt="Latest version" /></a>
+	<a href="https://travis-ci.org/tbrand/neph"><img src="https://travis-ci.org/tbrand/neph.svg?branch=master&style=flat" alt="Latest version" /></a>
+	<a href="https://github.com/tbrand/neph/releases"><img src="https://img.shields.io/github/release/tbrand/neph.svg?style=flat" alt="Latest version" /></a>
+	<a href="https://raw.githubusercontent.com/tbrand/neph/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat" /></a>
+	<a href="https://github.com/tbrand/neph/wiki"><img src="https://img.shields.io/badge/Document-wiki-blue.svg?style=flat" /></a>
+	<a href="https://github.com/tbrand/neph/issues"><img src="https://img.shields.io/github/issues/tbrand/neph.svg?style=flat" /></a>
+</p>
+
+<p align="center">
+	<img src="https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif" width="600" />
 </p>
 
 A modern command line job processor written in Crystal that can execute jobs concurrently. :rocket:  
 Neph can be substitute for `make` command. :rocket:  
 
-<img src="https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif" width="400" />  
-
-Neph is self-hosting. So after installing neph, try
-```bash
-> neph
-```
-at installed directory.
-
 ## Installation
 
-Neph is written in Crystal, so you need Crystal to install Neph. To install Crystal, see [official manual](https://github.com/crystal-lang/crystal).
-
-To install neph, run following command
-```bash
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/tbrand/neph/release/tools/install.rb)"
-```
-
-### Install neph manually
-Cloning this project
-```bash
-git clone https://github.com/tbrand/neph
-```
-
-Compile
-```bash
-> cd neph
-> shards build --release
-```
-
-Now executable binary is at `neph/bin/neph`.
+WIP. If you have `crystal` in your environment, you can build by `shards build`.
 
 ## Usage
 
-Put `neph.yml` at root of your project
-```yaml
-main:
-  command:
-    echo "Hello Neph!"
-```
+All features for neph.yml is written in [sample/neph.yml](https://github.com/tbrand/neph/blob/master/sample/neph.yml). So please refer for the details.
 
-Execute `neph`
-```bash
-> neph
-```
+Wiki is also maintained as a document. Here is a full features.
+ - [Execute command from neph](https://github.com/tbrand/neph/wiki/Execute-command-from-neph)
+ - [Define dependencies between jobs](https://github.com/tbrand/neph/wiki/Define-dependencies-between-jobs)
+ - [Working directory](https://github.com/tbrand/neph/wiki/Working-directory)
+ - [Specify sources](https://github.com/tbrand/neph/wiki/Specify-sources)
+ - [Ignoring errors](https://github.com/tbrand/neph/wiki/Ignoring-errors)
+ - [Set a job result to env vars](https://github.com/tbrand/neph/wiki/Set-a-job-result-to-env-vars)
+ - [Import other configurations](https://github.com/tbrand/neph/wiki/Import-other-configurations)
+ - [Command line options](https://github.com/tbrand/neph/wiki/Command-line-options)
+ - [Log locations](https://github.com/tbrand/neph/wiki/Log-locations)
 
-STDOUT and STDERR logs are located at `.neph/log/[job_name]/*`
-
-### Options
-
-You can specify job name by `-j`. In neph.yml,
-```yaml
-hello:
-  command:
-    echo "Hello!"
-```
-Then,
-```bash
-> neph -j hello
-```
-
-To see other usages, use `--help` option
-```bash
-> neph --help
-```
-
-### neph.yml
-
-You can define dependencies between jobs like this
-```yaml
-main:
-  command:
-    echo "Main!"
-  depends_on:
-    - hello
-hello:
-  command:
-    echo "Hello!"
-```
-Here `main` job depends on `hello`. So when you execute `neph`, `hello` job is triggered before the execution of the `main` job.
-
-You can ignore errors by `ignore_error: true`
-```yaml
-main:
-  command:
-    echo "Main!"
-  depends_on:
-    - hello
-hello:
-  command:
-    hogehoge
-  ignore_error:
-    true
-```
-In this jobs, hello job will raise an error since `hogehoge` command doesn't exist. But main job will be triggered.
-
-You can specify sources by `src:` for the jobs like `make` command.
-```yaml
-main:
-  command:
-    echo "Main!"
-  depends_on:
-    - hello
-  src:
-    - src/test.c
-hello:
-  command:
-    hogehoge
-  ignore_error:
-    true
-```
-If the sources are not updated, the job will be skipped.
-
-You can import other configurations by
-```yaml
-import:
-  - import_config.yml
-
-main:
-  depends_on:
-    import_config_job
-```
-where `import_config.yml` is
-```yaml
-import_config_job:
-  command:
-    echo "OK!"
-```
-
-See [sample](https://github.com/tbrand/neph/blob/master/sample/neph.yml) for details.
-
-## Used
+## Use cases
 
 Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest). In `which_is_the_fastest`, building time is **reduced from 102[sec] to 33[sec]**. [neph.yml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yml) is here.
 

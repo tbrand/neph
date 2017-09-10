@@ -19,6 +19,7 @@ module Neph
     getter done_command    : Int32 = 0
     getter commands        : Array(String) = [] of String
 
+    property env : String?
     property dir : String = Dir.current
     property src : Array(String) = [] of String
     property ignore_error : Bool = false
@@ -37,7 +38,8 @@ module Neph
       end unless @command.empty?
     end
 
-    def add_sub_job(job : Job)
+    def add_sub_job(job : Job, env : String?)
+      job.env = env if env
       @depends_on.push(job)
     end
 
@@ -133,6 +135,14 @@ module Neph
       return @parent_job.not_nil!.has_parent_job?(sub_job_name)
     end
 
+    def prepare_env
+      depends_on.each do |sub_job|
+        if env_name = sub_job.env
+          ENV[env_name] = File.read("#{sub_job.log_dir}/#{log_out}")
+        end
+      end
+    end
+
     def exec(channel : Channel(Job))
       @status = WAITING
       exec_sub_job if @depends_on.size > 0
@@ -144,6 +154,8 @@ module Neph
       if up_to_date?
         @status = SKIP
       else
+        prepare_env
+
         exec_self
 
         if @status_code == 0

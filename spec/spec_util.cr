@@ -4,7 +4,7 @@ def neph_install
 end
 
 def neph_clean
-  `./bin/neph --clean`
+  `./bin/neph clean`
 end
 
 def base_path
