@@ -58,11 +58,3 @@ tag = 'v' + @new_version
 `git push https://#{ENV['GH_TOKEN']}@github.com/tbrand/neph.git HEAD:release`
 `git tag #{tag} -a -m "Release from Travis CI for build number $TRAVIS_BUILD_NUMBER"`
 `git push --quiet https://#{ENV['GH_TOKEN']}@github.com/tbrand/neph.git --tags 2> /dev/null`
-
-release_json = `curl https://api.github.com/repos/tbrand/neph/releases/tags/#{tag}`
-release_info = JSON.parse(release_json)[0]
-release_id   = release_info['id']
-
-puts "Release id: #{release_id}"
-
-`curl -# -XPOST -H "Authorization:token #{ENV['GH_TOKEN']}" -H "Content-Type:application/octet-stream" --data-binary @bin/neph https://uploads.github.com/repos/tbrand/neph/releases/#{release_id}/assets?name=neph`
