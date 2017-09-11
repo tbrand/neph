@@ -17,6 +17,7 @@ script:
 
 before_deploy:
   - ruby ci/release.rb
+  - shards build --release
 deploy:
   provider: releases
   api_key:
@@ -25,4 +26,4 @@ deploy:
   skip_cleanup: true
   on:
     tags: false
-    branch: release
+    branch: master
