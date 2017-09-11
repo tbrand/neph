@@ -38,10 +38,6 @@ def bump_shard_yml
   `git add #{file_path}`
 end
 
-def upload_binary
-  
-end
-
 # Update current version
 update_version
 
