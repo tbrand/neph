@@ -31,6 +31,7 @@ module Neph
       @tmp_dir = "#{@ws_dir}/tmp"
       @step = 0
       @status = WAITING
+      @prev_status = -1
       @elapsed_time = ""
 
       @commands = @command.split("\n").reject do |command|
@@ -64,52 +65,71 @@ module Neph
     def status_msg(indent_spaces = "")
       case @status
       when WAITING
-        return progress_msg + " #{get_progress} waiting".colorize.fore(:light_yellow).to_s
+        return "#{@name}".colorize.mode(:bold).to_s + progress_msg + "#{get_progress} waiting".colorize.fore(:light_yellow).to_s
       when RUNNING
-        return progress_msg + " #{get_progress} running (#{progress_percent}%)".colorize.fore(:light_cyan).to_s + " > #{@current_command}".colorize.mode(:bright).to_s
+        return "#{@name}".colorize.mode(:bold).to_s + progress_msg + "#{get_progress} running (#{progress_percent}%)".colorize.fore(:light_cyan).to_s + " > #{@current_command}".colorize.mode(:bright).to_s
       when DONE
-        return progress_msg + " done.".colorize.fore(:light_gray).to_s + "   #{@elapsed_time}"
+        return "#{@name}".colorize.mode(:bold).to_s + progress_msg + "done.".colorize.fore(:light_gray).to_s + "   #{@elapsed_time}"
       when ERROR
-        return progress_msg + " error!".colorize.fore(:red).to_s
+        return "#{@name}".colorize.mode(:bold).to_s + progress_msg + "error!".colorize.fore(:red).to_s
       when SKIP
-        return progress_msg + " up to date".colorize.fore(:light_blue).to_s
+        return "#{@name}".colorize.mode(:bold).to_s + progress_msg + "up to date".colorize.fore(:light_blue).to_s
+      end
+    end
+
+    def status_msg_ci
+      case @status
+      when WAITING
+        return "#{time_msg} #{@name}" + " -- waiting".colorize.fore(:light_yellow).to_s
+      when RUNNING
+        return "#{time_msg} #{@name}" + " -- running".colorize.fore(:light_cyan).to_s
+      when DONE
+        return "#{time_msg} #{@name}" + " -- done.".colorize.fore(:light_gray).to_s + " #{@elapsed_time}"
+      when ERROR
+        return "#{time_msg} #{@name}" + " -- error!".colorize.fore(:red).to_s
+      when SKIP
+        return "#{time_msg} #{@name}" + " -- up to date".colorize.fore(:light_blue).to_s
       end
     end
 
     def to_s(indent = 0) : String
       indent_spaces = "" + " " * (indent * 4)
-      job_s = String::Builder.new("#{@name}".colorize.mode(:bold).to_s + " #{status_msg(indent_spaces)}")
-      job_s << "\n"
+      job_s = String::Builder.new("#{status_msg(indent_spaces)}\n")
 
       depends_on.each do |sub_job|
         job_s << "#{indent_spaces} - #{sub_job.to_s(indent + 1)}"
       end
+
+      job_s.to_s
+    end
+
+    def to_s_ci : String
+      job_s = String::Builder.new("")
+
+      depends_on.each do |sub_job|
+        sub_job_s = sub_job.to_s_ci
+        job_s << "#{sub_job_s}" if sub_job_s.size > 0
+      end
+
+      job_s << "#{status_msg_ci}\n" if status_changed?
       job_s.to_s
     end
 
     def num_of_jobs
-      num = 1
-      @depends_on.each do |sub_job|
-        num += sub_job.num_of_jobs
-      end
-      num
+      @depends_on.reduce(1){ |sum, sub_job| sum + sub_job.num_of_jobs }
     end
 
     def num_of_done_jobs
-      num = if done?
-              1
-            else
-              0
-            end
-
-      @depends_on.each do |sub_job|
-        num += sub_job.num_of_done_jobs
-      end
-      num
+      @depends_on.reduce(done? ? 1 : 0){ |sum, sub_job| sum + sub_job.num_of_done_jobs }
     end
 
     def progress_msg : String
-      "[#{progress}/#{progress_max}]"
+      " [#{progress}/#{progress_max}] "
+    end
+
+    def time_msg : String
+      time = Time.now.to_s("%Y-%m-%d %H:%S:%M")
+      "[#{time}] "
     end
 
     def progress_percent : Int32
@@ -125,8 +145,17 @@ module Neph
       num_of_jobs
     end
 
-    def done?
+    def done? : Bool
       @status == DONE || @status == ERROR || @status == SKIP
+    end
+
+    def status_changed? : Bool
+      if @status != @prev_status
+        @prev_status = @status
+        return true
+      end
+
+      false
     end
 
     def has_parent_job?(sub_job_name : String) : Bool
