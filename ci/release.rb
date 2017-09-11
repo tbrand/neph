@@ -7,7 +7,7 @@ def update_version
   file_path = File.expand_path("../../src/neph/version.cr", __FILE__)
   file = File.read(file_path)
 
-  if /^.*\"(\d\.\d\.\d)\".*$/ =~ file
+  if /^.*\"(\d+\.\d+\.\d+)\".*$/ =~ file
     @current_version = $1
     versions = @current_version.split('.')
     patch_version = versions.last.to_i + 1
