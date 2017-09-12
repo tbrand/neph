@@ -51,6 +51,5 @@ tag = 'v' + @new_version
 `git config --global user.email "travis@travis-ci.org"`
 `git commit -m "[skip ci] bumped version #{@new_version}"`
 `git push https://#{ENV['GH_TOKEN']}@github.com/tbrand/neph.git HEAD:master`
-`git push https://#{ENV['GH_TOKEN']}@github.com/tbrand/neph.git HEAD:release`
 `git tag #{tag} -a -m "Release from Travis CI for build number $TRAVIS_BUILD_NUMBER"`
 `git push --quiet https://#{ENV['GH_TOKEN']}@github.com/tbrand/neph.git --tags 2> /dev/null`
