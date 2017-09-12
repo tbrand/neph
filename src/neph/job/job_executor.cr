@@ -1,9 +1,9 @@
 module Neph
   class JobExecutor
 
-    def initialize(@job : Job); end
+    def initialize(@job : Job, @options : Hash(String, String)); end
 
-    def exec(@mode : String)
+    def exec
       channel = Channel(Job).new
       @start = Time.now
 
@@ -41,7 +41,7 @@ module Neph
     end
 
     def print_status
-      case @mode
+      case @options["mode"]
       when "NORMAL"
         print_status_normal
       when "CI"

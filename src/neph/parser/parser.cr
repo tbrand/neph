@@ -49,6 +49,11 @@ module Neph
                          else
                            false
                          end if job_config.has_key?("ignore_error")
+      job.hide = if job_config["hide"].as(String) == "true"
+                   true
+                 else
+                   false
+                 end if job_config.has_key?("hide")
 
       if job_config.has_key?("src")
         if job_config["src"].is_a?(YArray)

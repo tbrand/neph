@@ -10,11 +10,14 @@ class NephBin
   def initialize
     ready_dir
 
-    @mode = "NORMAL"
+    @options = {
+      "mode" => "NORMAL",
+    }
+
     @job_name = JOB_NAME
     @config_path = CONFIG_PATH
   end
-  
+
   def parse_option!
     OptionParser.parse! do |parser|
       parser.banner = "Basic usage: neph [options]"
@@ -41,7 +44,7 @@ class NephBin
           exit -1
         end
 
-        @mode = mode
+        @options["mode"] = mode
       end
 
       parser.on("-v", "--version", "Show the version") do
@@ -103,8 +106,8 @@ class NephBin
   def exec
     main_job = parse_yaml(@job_name, @config_path)
 
-    job_executor = JobExecutor.new(main_job)
-    job_executor.exec(@mode)
+    job_executor = JobExecutor.new(main_job, @options)
+    job_executor.exec
   end
 
   include Neph

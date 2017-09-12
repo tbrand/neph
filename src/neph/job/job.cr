@@ -23,6 +23,7 @@ module Neph
     property dir : String = Dir.current
     property src : Array(String) = [] of String
     property ignore_error : Bool = false
+    property hide : Bool = false
 
     def initialize(@name : String, @command : String, @parent_job : Job?)
       @depends_on = [] of Job
@@ -63,12 +64,17 @@ module Neph
       progress
     end
 
+    def shown_command : String
+      return @current_command unless hide
+      "HIDDEN"
+    end
+
     def status_msg(indent_spaces = "")
       case @status
       when WAITING
         return "#{@name}".colorize.mode(:bold).to_s + progress_msg + "#{get_progress} waiting".colorize.fore(:light_yellow).to_s
       when RUNNING
-        return "#{@name}".colorize.mode(:bold).to_s + progress_msg + "#{get_progress} running (#{progress_percent}%)".colorize.fore(:light_cyan).to_s + " > #{@current_command}".colorize.mode(:bright).to_s
+        return "#{@name}".colorize.mode(:bold).to_s + progress_msg + "#{get_progress} running (#{progress_percent}%)".colorize.fore(:light_cyan).to_s + " > #{shown_command}".colorize.mode(:bright).to_s
       when DONE
         return "#{@name}".colorize.mode(:bold).to_s + progress_msg + "done.".colorize.fore(:light_gray).to_s + "   #{@elapsed_time}"
       when ERROR
@@ -83,7 +89,7 @@ module Neph
       when WAITING
         return "#{time_msg} #{@name}" + " -- waiting".colorize.fore(:light_yellow).to_s
       when RUNNING
-        return "#{time_msg} #{@name}" + " -- running".colorize.fore(:light_cyan).to_s + " > #{@current_command}".colorize.mode(:bright).to_s
+        return "#{time_msg} #{@name}" + " -- running".colorize.fore(:light_cyan).to_s + " > #{shown_command}".colorize.mode(:bright).to_s
       when DONE
         return "#{time_msg} #{@name}" + " -- done.".colorize.fore(:light_gray).to_s + " #{@elapsed_time}"
       when ERROR
