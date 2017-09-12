@@ -20,7 +20,18 @@
 
 ## Installation
 
-WIP. If you have `crystal` in your environment, you can build by `shards build`.
+If you are using Mac, you can install by brew
+```
+$ brew tap tbrand/homebrew-neph
+$ brew install neph
+```
+
+If you have `crystal` in your environment, you can build by `shards build`.
+```
+$ git clone https://github.com/tbrand/neph
+$ cd neph
+$ shards build # Now executable binary is located at bin/neph
+```
 
 ## Usage
 
