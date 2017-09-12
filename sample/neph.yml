@@ -27,6 +27,8 @@ sub_sub_job0:
     sleep 0.2
   dir:
     sample
+  depends_on:
+    - hide_command
 
 sub_sub_job1:
   command: |
@@ -58,6 +60,13 @@ print_result:
     -
       job: ruby_job
       env: RESULT
+
+hide_command:
+  command: |
+    sleep 1
+    echo "Can you see me?"
+  hide:
+    true
 
 ruby_job:
   command:
