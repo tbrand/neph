@@ -14,7 +14,8 @@ sub_job0:
     - sub_sub_job1
 
 sub_job1:
-  command:
+  command: |
+    sleep 0.8
     sleep 1.2
   depends_on:
     sub_sub_job2
