@@ -44,16 +44,8 @@ module Neph
 
       job = Job.new(job_name, job_command, parent_job)
       job.dir = job_config["dir"].as(String) if job_config.has_key?("dir")
-      job.ignore_error = if job_config["ignore_error"].as(String) == "true"
-                           true
-                         else
-                           false
-                         end if job_config.has_key?("ignore_error")
-      job.hide = if job_config["hide"].as(String) == "true"
-                   true
-                 else
-                   false
-                 end if job_config.has_key?("hide")
+      job.ignore_error = job_config["ignore_error"] ? true : false if job_config.has_key?("ignore_error")
+      job.hide = job_config["hide"] ? true : false if job_config.has_key?("hide")
 
       if job_config.has_key?("src")
         if job_config["src"].is_a?(YArray)
