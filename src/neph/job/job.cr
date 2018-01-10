@@ -1,23 +1,23 @@
 module Neph
   class Job
     TICK_CHARS = "⠁⠁⠉⠙⠚⠒⠂⠂⠒⠲⠴⠤⠄⠄⠤⠠⠠⠤⠦⠖⠒⠐⠐⠒⠓⠋⠉⠈⠈ "
-    WAITING = 0
-    RUNNING = 1
-    DONE    = 2
-    ERROR   = 3
-    SKIP    = 4
+    WAITING    = 0
+    RUNNING    = 1
+    DONE       = 2
+    ERROR      = 3
+    SKIP       = 4
 
-    getter name            : String
-    getter command         : String
-    getter ws_dir          : String
-    getter log_dir         : String
-    getter tmp_dir         : String
-    getter depends_on      : Array(Job)
-    getter status_code     : Int32 = 0
-    getter elapsed_time    : String
+    getter name : String
+    getter command : String
+    getter ws_dir : String
+    getter log_dir : String
+    getter tmp_dir : String
+    getter depends_on : Array(Job)
+    getter status_code : Int32 = 0
+    getter elapsed_time : String
     getter current_command : String = ""
-    getter done_command    : Int32 = 0
-    getter commands        : Array(String) = [] of String
+    getter done_command : Int32 = 0
+    getter commands : Array(String) = [] of String
 
     property env : String?
     property dir : String = Dir.current
@@ -59,7 +59,7 @@ module Neph
     end
 
     def get_progress : String
-      progress = TICK_CHARS[@step%TICK_CHARS.size].to_s
+      progress = TICK_CHARS[@step % TICK_CHARS.size].to_s
       @step += 1
       progress
     end
@@ -123,11 +123,11 @@ module Neph
     end
 
     def num_of_jobs
-      @depends_on.reduce(1){ |sum, sub_job| sum + sub_job.num_of_jobs }
+      @depends_on.reduce(1) { |sum, sub_job| sum + sub_job.num_of_jobs }
     end
 
     def num_of_done_jobs
-      @depends_on.reduce(done? ? 1 : 0){ |sum, sub_job| sum + sub_job.num_of_done_jobs }
+      @depends_on.reduce(done? ? 1 : 0) { |sum, sub_job| sum + sub_job.num_of_done_jobs }
     end
 
     def progress_msg : String
@@ -260,9 +260,7 @@ module Neph
       s = Time.now
 
       unless @commands.size == 0
-
         @commands.each do |command|
-
           next if command.empty?
 
           @current_command = command
@@ -283,7 +281,7 @@ module Neph
       end
 
       e = Time.now
-      @elapsed_time = format_time(e-s)
+      @elapsed_time = format_time(e - s)
       stdout.close
       stderr.close
     end

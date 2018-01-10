@@ -4,7 +4,7 @@ require "colorize"
 require "../neph"
 
 class NephBin
-  JOB_NAME = "main"
+  JOB_NAME    = "main"
   CONFIG_PATH = "neph.yml"
 
   def initialize
