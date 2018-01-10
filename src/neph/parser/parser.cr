@@ -12,7 +12,7 @@ module Neph
 
       config
     end
-    
+
     def parse_yaml(job_name : String, path : String) : Job
       config = parse_yaml(path)
 
