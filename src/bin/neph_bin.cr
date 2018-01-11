@@ -4,7 +4,7 @@ require "colorize"
 require "../neph"
 
 class NephBin
-  JOB_NAME = "main"
+  JOB_NAME    = "main"
   CONFIG_PATH = "neph.yml"
 
   def initialize
@@ -87,7 +87,7 @@ class NephBin
 
     loop do
       log_ln "Are you sure you want to uninstall 'neph'? [Y/n]"
-      
+
       if input = STDIN.gets
         case input
         when "Y"

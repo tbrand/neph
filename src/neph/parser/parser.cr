@@ -12,7 +12,7 @@ module Neph
 
       config
     end
-    
+
     def parse_yaml(job_name : String, path : String) : Job
       config = parse_yaml(path)
 
@@ -44,16 +44,8 @@ module Neph
 
       job = Job.new(job_name, job_command, parent_job)
       job.dir = job_config["dir"].as(String) if job_config.has_key?("dir")
-      job.ignore_error = if job_config["ignore_error"].as(String) == "true"
-                           true
-                         else
-                           false
-                         end if job_config.has_key?("ignore_error")
-      job.hide = if job_config["hide"].as(String) == "true"
-                   true
-                 else
-                   false
-                 end if job_config.has_key?("hide")
+      job.ignore_error = job_config["ignore_error"] ? true : false if job_config.has_key?("ignore_error")
+      job.hide = job_config["hide"] ? true : false if job_config.has_key?("hide")
 
       if job_config.has_key?("src")
         if job_config["src"].is_a?(YArray)
@@ -68,13 +60,13 @@ module Neph
       if job_config.has_key?("depends_on")
         if job_config["depends_on"].is_a?(YArray)
           job_config["depends_on"].as(YArray).each do |sub_job|
-            abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray|Nil)
-            add_sub_job(config, job, sub_job.as(String|YHash))
+            abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray | Nil)
+            add_sub_job(config, job, sub_job.as(String | YHash))
           end
         else
           sub_job = job_config["depends_on"]
-          abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray|Nil)
-          add_sub_job(config, job, sub_job.as(String|YHash))
+          abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray | Nil)
+          add_sub_job(config, job, sub_job.as(String | YHash))
         end
       end
 
