@@ -81,7 +81,7 @@ describe Neph do
   it "Set the stdout result to environment variable" do
     exec_neph("output.yml", "output")
     stdout_of("output").should eq("The result is 4\n\n")
-    stdout_of("run_ruby").should eq("4\n")
+    stdout_of("run_crystal").should eq("4\n")
     stdout_of("just_echo").should eq("I'm echo\n")
     stdout_of("just_echo2").should eq("I'm second echo\n")
   end
