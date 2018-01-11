@@ -21,13 +21,13 @@
 ## Installation
 
 If you are using Mac, you can install by brew
-```
+```bash
 $ brew tap tbrand/homebrew-neph
 $ brew install neph
 ```
 
 If you have `crystal` in your environment, you can build by `shards build`.
-```
+```bash
 $ git clone https://github.com/tbrand/neph
 $ cd neph
 $ shards build # Now executable binary is located at bin/neph
@@ -43,6 +43,7 @@ Wiki is also maintained as a document. Here is a full features.
  - [Working directory](https://github.com/tbrand/neph/wiki/Working-directory)
  - [Specify sources](https://github.com/tbrand/neph/wiki/Specify-sources)
  - [Ignoring errors](https://github.com/tbrand/neph/wiki/Ignoring-errors)
+ - [Hide executing command](https://github.com/tbrand/neph/wiki/Hide-executing-command)
  - [Set a job result to env vars](https://github.com/tbrand/neph/wiki/Set-a-job-result-to-env-vars)
  - [Import other configurations](https://github.com/tbrand/neph/wiki/Import-other-configurations)
  - [Command line options](https://github.com/tbrand/neph/wiki/Command-line-options)
