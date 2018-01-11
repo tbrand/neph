@@ -3,7 +3,7 @@ require "./neph/*"
 module Neph
   include Neph::Parser
   include Neph::Message
-  
+
   NEPH_DIR = ".neph"
 
   LOG_OUT = "log.out"
@@ -45,19 +45,11 @@ module Neph
     "#{(millis * 1000).round(2)}µs"
   end
 
-  def log_ln(msg : String)
-    log(msg + "\n", false)
-  end
-
-  def log_ln(msg : String, force : Bool)
+  def log_ln(msg : String, force : Bool = false)
     log(msg + "\n", force)
   end
 
-  def log(msg : String)
-    log(msg, false)
-  end
-
-  def log(msg : String, force : Bool)
+  def log(msg : String, force : Bool = false)
     print msg if !@quiet || force
   end
 end
