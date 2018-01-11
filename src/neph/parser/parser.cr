@@ -60,13 +60,13 @@ module Neph
       if job_config.has_key?("depends_on")
         if job_config["depends_on"].is_a?(YArray)
           job_config["depends_on"].as(YArray).each do |sub_job|
-            abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray|Nil)
-            add_sub_job(config, job, sub_job.as(String|YHash))
+            abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray | Nil)
+            add_sub_job(config, job, sub_job.as(String | YHash))
           end
         else
           sub_job = job_config["depends_on"]
-          abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray|Nil)
-          add_sub_job(config, job, sub_job.as(String|YHash))
+          abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray | Nil)
+          add_sub_job(config, job, sub_job.as(String | YHash))
         end
       end
 

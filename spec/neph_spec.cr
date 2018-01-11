@@ -7,7 +7,7 @@ describe Neph do
   Spec.before_each do
     neph_clean
   end
-  
+
   it "If no jobs are specified, 'main' job will be executed" do
     exec_neph("main.yml")
     stdout_of("main").should eq("OK\n")
