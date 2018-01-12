@@ -13,7 +13,7 @@ install:
   shards build --release
 
 script:
-  ./bin/neph test
+  ./bin/neph test --mode=CI
 
 before_deploy:
   - ruby ci/release.rb
