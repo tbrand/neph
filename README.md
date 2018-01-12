@@ -39,6 +39,8 @@ $ cd neph
 $ shards build # Now executable binary is located at bin/neph
 ```
 
+Neph can be easily uninstalled, it is only one binary.
+
 ## Usage
 
 All features for neph.yml is written in [sample/neph.yml](https://github.com/tbrand/neph/blob/master/sample/neph.yml). So please refer for the details.
