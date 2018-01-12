@@ -1,10 +1,10 @@
 def neph_install
   puts "Installing neph..."
-  `shards build --release`
+  `shards build`
 end
 
 def neph_clean
-  `./bin/neph clean`
+  `./bin/neph --clean`
 end
 
 def base_path
@@ -12,7 +12,7 @@ def base_path
 end
 
 def exec_neph(config_file : String, job_name : String)
-  `./bin/neph -y #{base_path}/#{config_file} -j #{job_name}`
+  `./bin/neph -y #{base_path}/#{config_file} #{job_name}`
 end
 
 def exec_neph(config_file : String)

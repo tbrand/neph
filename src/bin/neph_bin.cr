@@ -6,6 +6,8 @@ require "../neph"
 class NephBin
   JOB_NAME    = "main"
   CONFIG_PATH = "neph.yml"
+  @job_name : String = JOB_NAME
+  @config_path : String = CONFIG_PATH
 
   def initialize
     ready_dir
@@ -14,21 +16,12 @@ class NephBin
       "mode" => "NORMAL",
     }
 
-    @job_name = JOB_NAME
-    @config_path = CONFIG_PATH
+    parse_option!
   end
 
   def parse_option!
     OptionParser.parse! do |parser|
-      parser.banner = "Basic usage: neph [options]"
-
-      parser.on(
-        "-j JOB",
-        "--job=JOB",
-        "Specify a job name to be executed (Default is  #{JOB_NAME})"
-      ) do |job_name|
-        @job_name = job_name
-      end
+      parser.banner = "Basic usage: neph [options] [job_name]"
 
       parser.on(
         "-y CONFIG",
@@ -39,7 +32,7 @@ class NephBin
       end
 
       parser.on("-m MODE", "--mode=MODE", "Log modes [NORMAL/CI/QUIET] (Default is NORMAL)") do |mode|
-        if mode != "NORMAL" && mode != "CI" && mode != "QUIET"
+        if !{"NORMAL", "CI", "QUIET"}.includes? mode
           log_ln "Please select mode from one of NORMAL, CI or QUIET."
           exit -1
         end
@@ -54,20 +47,21 @@ class NephBin
 
       parser.on("-h", "--help", "Show this help") do
         log_ln parser.to_s
-        log_ln "Action: neph [action]"
-        log_ln "    neph clean     - Cleaning every caches"
+        exit 0
+      end
+
+      parser.on("-c", "--clean", "Cleaning caches") do
+        log_ln "Neph".colorize.fore(:green).mode(:bold).to_s + " is cleaning caches ..."
+        clean
         exit 0
       end
 
       parser.unknown_args do |args|
-        args.each do |arg|
-          case arg
-          when "clean"
-            log_ln "Neph".colorize.fore(:green).mode(:bold).to_s + " is cleaning caches ..."
-            clean
-            exit 0
-          end
+        if args.size > 1
+          log_ln "Only one job is supported yet."
+          exit 1
         end
+        @job_name = args[0] if args[0]?
       end
     end
   end
@@ -87,5 +81,4 @@ class NephBin
 end
 
 neph_bin = NephBin.new
-neph_bin.parse_option!
 neph_bin.exec
