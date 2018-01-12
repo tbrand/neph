@@ -58,7 +58,7 @@ print_result:
     echo "The result is $RESULT!"
   depends_on:
     -
-      job: ruby_job
+      job: crystal_eval_job
       env: RESULT
 
 hide_command:
@@ -68,6 +68,6 @@ hide_command:
   hide:
     true
 
-ruby_job:
+crystal_eval_job:
   command:
-    ruby -e 'print 1 + 5'
+    crystal eval 'print 1 + 5'
