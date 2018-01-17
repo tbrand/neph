@@ -1,5 +1,5 @@
 import:
-  spec/configs/imported_single.yml
+  spec/configs/imported_single.yaml
 
 import_single:
   command:

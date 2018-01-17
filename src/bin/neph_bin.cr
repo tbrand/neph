@@ -5,7 +5,7 @@ require "../neph"
 
 class NephBin
   JOB_NAME    = "main"
-  CONFIG_PATH = "neph.yml"
+  CONFIG_PATH = "neph.yaml"
   @job_name : String = JOB_NAME
   @config_path : String = CONFIG_PATH
 
@@ -25,8 +25,8 @@ class NephBin
 
       parser.on(
         "-y CONFIG",
-        "--yml=CONFIG",
-        "Specify a location of neph.yml (Default is #{CONFIG_PATH})"
+        "--yaml=CONFIG",
+        "Specify a location of neph.yaml (Default is #{CONFIG_PATH})"
       ) do |config_path|
         @config_path = config_path
       end

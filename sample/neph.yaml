@@ -1,6 +1,6 @@
 # You can import jobs from other configuration file
 import:
-  sample/outside_configuration.yml
+  sample/outside_configuration.yaml
 
 main:
   command: |
@@ -46,7 +46,7 @@ specify_sources:
   command: |
     echo "This job will not be triggered if the sources are not updated"
     echo "The feature is inspired by make command"
-    echo "'outside_job' is defined at sample/outside_configuration.yml"
+    echo "'outside_job' is defined at sample/outside_configuration.yaml"
     sleep 0.2
   src:
     - src/**/*.cr

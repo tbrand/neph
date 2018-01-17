@@ -1,6 +1,6 @@
 import:
-  - spec/configs/imported0.yml
-  - spec/configs/imported1.yml
+  - spec/configs/imported0.yaml
+  - spec/configs/imported1.yaml
 
 import_main:
   command:
