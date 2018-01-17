@@ -20,13 +20,19 @@
 
 ## Installation
 
-If you are using Mac, you can install by brew
+### Arch Linux
+Use your favourite AUR helper.  
+Package name: [`neph-git`](https://aur.archlinux.org/packages/neph-git/)
+
+### Mac
+You can install Neph with `brew`.
 ```bash
 $ brew tap tbrand/homebrew-neph
 $ brew install neph
 ```
 
-If you have `crystal` in your environment, you can build by `shards build`.
+### Manual
+If you have `crystal`, and `shards` in your environment, you can build by `shards build`.
 ```bash
 $ git clone https://github.com/tbrand/neph
 $ cd neph
