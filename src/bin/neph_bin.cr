@@ -47,6 +47,11 @@ class NephBin
 
       parser.on("-h", "--help", "Show this help") do
         log_ln parser.to_s
+        puts "Recent incompatible changes:
+    - '.yml' extension changed to '.yaml'
+    - 'uninstall' action removed, because it is the job of the distro package manager
+    - 'clean' action moved to '--clean'
+    - '-j|--job' option removed"
         exit 0
       end
 
