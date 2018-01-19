@@ -26,22 +26,24 @@ Package name: [`neph-git`](https://aur.archlinux.org/packages/neph-git/)
 
 ### Mac
 You can install Neph with `brew`.
-```
+```bash
 $ brew tap tbrand/homebrew-neph
 $ brew install neph
 ```
 
 ### Manual
 If you have `crystal`, and `shards` in your environment, you can build by `shards build`.
-```
+```bash
 $ git clone https://github.com/tbrand/neph
 $ cd neph
 $ shards build # Now executable binary is located at bin/neph
 ```
 
+Neph can be easily uninstalled, it is only one binary.
+
 ## Usage
 
-All features for neph.yml is written in [sample/neph.yml](https://github.com/tbrand/neph/blob/master/sample/neph.yml). So please refer for the details.
+All features for neph.yaml is written in [sample/neph.yaml](https://github.com/tbrand/neph/blob/master/sample/neph.yaml). So please refer for the details.
 
 Wiki is also maintained as a document. Here is a full features.
  - [Execute command from neph](https://github.com/tbrand/neph/wiki/Execute-command-from-neph)
@@ -49,6 +51,7 @@ Wiki is also maintained as a document. Here is a full features.
  - [Working directory](https://github.com/tbrand/neph/wiki/Working-directory)
  - [Specify sources](https://github.com/tbrand/neph/wiki/Specify-sources)
  - [Ignoring errors](https://github.com/tbrand/neph/wiki/Ignoring-errors)
+ - [Hide executing command](https://github.com/tbrand/neph/wiki/Hide-executing-command)
  - [Set a job result to env vars](https://github.com/tbrand/neph/wiki/Set-a-job-result-to-env-vars)
  - [Import other configurations](https://github.com/tbrand/neph/wiki/Import-other-configurations)
  - [Command line options](https://github.com/tbrand/neph/wiki/Command-line-options)
@@ -59,7 +62,7 @@ Wiki is also maintained as a document. Here is a full features.
 
 Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest). In `which_is_the_fastest`.  
 The building time is **reduced from 102[sec] to 33[sec]**.  
-The [neph.yml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yml) is here.
+The [neph.yaml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yaml) is here.
 
 ## Contributing
 
