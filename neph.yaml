@@ -1,4 +1,9 @@
 main:
+  depends_on:
+    - man
+    - binary
+
+binary:
   command:
     shards build --release
   src:
@@ -7,3 +12,7 @@ main:
 test:
   command:
     crystal spec
+
+man:
+  command:
+    go-md2man -in neph.1.md -out neph.1
