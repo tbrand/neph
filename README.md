@@ -14,9 +14,9 @@
 	<img src="https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif" width="700" />
 </p>
 
-1. A modern command line job processor written in Crystal :rocket:  
-2. Can execute jobs concurrently. :rocket:  
-3. Can be substitute for `make` command. :rocket:  
+- A modern command line job processor written in Crystal :rocket:
+- Can execute jobs concurrently. :rocket:
+- Can be substitute for `make` command. :rocket:
 
 ## Installation
 
@@ -39,8 +39,6 @@ $ cd neph
 $ shards build # Now executable binary is located at bin/neph
 ```
 
-Neph can be easily uninstalled, it is only one binary.
-
 ## Usage
 
 All features for neph.yaml is written in [sample/neph.yaml](https://github.com/tbrand/neph/blob/master/sample/neph.yaml). So please refer for the details.
@@ -60,8 +58,8 @@ Wiki is also maintained as a document. Here is a full features.
 
 ## Use cases
 
-Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest). In `which_is_the_fastest`.  
-The building time is **reduced from 102[sec] to 33[sec]**.  
+Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest).  
+The build time is **reduced from 102[sec] to 33[sec]**.  
 The [neph.yaml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yaml) is here.
 
 ## Contributing
@@ -75,3 +73,4 @@ The [neph.yaml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.
 ## Contributors
 
 - [tbrand](https://github.com/tbrand) Taichiro Suzuki - creator, maintainer
+- [notramo](https://github.com/notramo) Márton Szabó - maintainer
