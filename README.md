@@ -32,7 +32,8 @@ $ brew install neph
 ```
 
 ### Manual
-If you have `crystal`, and `shards` in your environment, you can build by `shards build`.
+If you have `crystal`, and `shards` in your environment, you can build by `shards build`.  
+It needs `libyaml` to be installed.
 ```bash
 $ git clone https://github.com/tbrand/neph
 $ cd neph
