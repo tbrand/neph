@@ -14,6 +14,7 @@ test:
     crystal spec
 
 man:
+  ignore_error: true
   command:
     go-md2man -in neph.1.md -out neph.1
 
