@@ -32,12 +32,24 @@ $ brew install neph
 ```
 
 ### Manual
-If you have `crystal`, and `shards` in your environment, you can build by `shards build`.  
+Build dependencies:
+- `crystal` and `shards` for building the binary
+- `go-md2man` for generating the man page
+
 It needs `libyaml` to be installed.
+
+If you have a previous version of `neph` installed:
 ```bash
 $ git clone https://github.com/tbrand/neph
 $ cd neph
-$ shards build # Now executable binary is located at bin/neph
+$ neph           # man page will be at neph.1, binary will be at bin/neph
+```
+If you don't have a previous version of `neph` installed:
+```bash
+$ git clone https://github.com/tbrand/neph
+$ cd neph
+$ shards build    # Now executable binary is located at bin/neph
+$ bin/neph man    # Generate man page. It will be located at neph.1
 ```
 
 ## Usage

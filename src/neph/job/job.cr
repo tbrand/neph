@@ -47,9 +47,7 @@ module Neph
     end
 
     def add_sources(source_files : Array(String))
-      source_files.each do |file|
-        @src.push(file)
-      end
+        @src += source_files
     end
 
     def create_dir
@@ -203,6 +201,9 @@ module Neph
 
         if @status_code == 0
           @status = DONE
+          @src.each do |i|
+            File.touch tmp_file i
+          end
         else
           clean_tmp
           @status = ERROR
@@ -228,25 +229,22 @@ module Neph
     end
 
     def up_to_date? : Bool
-      return false if @src.size == 0
+      return false unless @src.size > 0
 
-      res = true
       @src.each do |source|
         stat = File.stat(source)
 
         if File.exists?(tmp_file(source))
           tmp_stat = File.stat(tmp_file(source))
-          if (stat.ctime - tmp_stat.atime).to_i != 0
-            File.touch(tmp_file(source), stat.ctime)
-            res = false
+          if (stat.ctime > tmp_stat.atime)
+            return false
           end
         else
           File.touch(tmp_file(source), stat.ctime)
-          res = false
+          return false
         end
       end
-
-      res
+      true
     end
 
     def tmp_file(source : String) : String

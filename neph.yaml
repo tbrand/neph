@@ -14,5 +14,12 @@ test:
     crystal spec
 
 man:
+  ignore_error: true
   command:
     go-md2man -in neph.1.md -out neph.1
+
+clean:
+  command:
+    rm -f bin/neph
+    rm -f neph.1
+    rm -fd bin

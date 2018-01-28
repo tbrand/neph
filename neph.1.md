@@ -18,7 +18,8 @@ It isn't ready yet, incompatible changes may appear in each release. See **INCOM
 
 **-m** *MODE*, **--mode** *MODE*
   Output mode. Values can be
-      - *NORMAL* (default) This mode shows each job in a tree structure, and a progress bar for the entire process.
+      - *AUTO* (default)   Automatically set output mode: if output is a terminal, it will be *NORMAL*, if it is a pipe, it will be *CI*
+      - *NORMAL*           This mode shows each job in a tree structure, and a progress bar for the entire process.
       - *CI*               This mode only prints if a job is started, or finished.
       - *QUIET*            Don't output anything.
 
