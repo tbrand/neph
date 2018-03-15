@@ -3,7 +3,7 @@ PREFIX ?= /usr/local
 SHARD_BIN ?= ../../bin
 
 build:
-	$(CRYSTAL_BIN) build --no-debug -o bin/neph src/neph.cr $(CRFLAGS)
+	$(CRYSTAL_BIN) build --no-debug -o bin/neph src/bin/neph_bin.cr $(CRFLAGS)
 clean:
 	rm -f ./bin/neph
 install: build
