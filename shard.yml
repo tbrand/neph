@@ -8,6 +8,12 @@ targets:
     neph:
       main: src/bin/neph_bin.cr
 
+scripts:
+  postinstall: make bin
+
 crystal: 0.24.2
 
 license: MIT
+
+executables:
+  - neph
