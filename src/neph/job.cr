@@ -16,6 +16,9 @@ module Neph
     # The interpreter that runs the job.
     property interpreter : Interpreter = Interpreter.new
     property commands : Array(String) = [] of String
+    # If the job is required by multiple jobs, and this variable is `true`, then
+    # the commands are evaluated each time the job is launched.
+    property repeat : Bool = false
 
     def initialize(@name : String)
     end

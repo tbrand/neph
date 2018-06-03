@@ -80,6 +80,12 @@ module Neph
 
             # Add it to the job
             job.sub_jobs = dependencies
+          when "repeat"
+            unless value.is_a? Bool
+              raise JobError.new job_name, "The value of the 'repeat' parameter have to be a boolean value."
+            end
+
+            job.repeat = value.as Bool
           else
             # The valid parameters for a job.
             valid_parameters = {"dependencies", "commands"}
