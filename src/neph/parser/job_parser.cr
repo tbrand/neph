@@ -93,6 +93,7 @@ module Neph
             raise "Wrong keyword ('#{key}') in the definition of the '#{job_name}' job. " + Parser.construct_keyword_suggestion key.as String, valid_parameters
           end
         end
+        @job_list[job_name] = job
         return job
       end
     end
