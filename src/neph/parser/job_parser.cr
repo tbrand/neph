@@ -7,13 +7,13 @@ class Neph::Parser::JobParser
   end
 
   def parse_jobs
-    # Check if @config.default_job exists in job list.
-    unless @raw_job_list.has_key? @config.default_job
-      raise "The job list doesn't contain the '#{@config.default_job}' job (specified with the 'default_job' config option)."
+    # Check if @config.main_job exists in job list.
+    unless @raw_job_list.has_key? @config.main_job
+      raise "The job list doesn't contain the '#{@config.main_job}' job (specified with the 'main_job' config option)."
     end
 
     # The dependency stack is empty.
-    parse_job_recursively [] of String, @config.default_job
+    parse_job_recursively [] of String, @config.main_job
   end
 
   private def parse_job_recursively(dependency_stack : Array(String), job_name : String) : Job

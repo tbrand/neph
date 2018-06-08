@@ -6,7 +6,7 @@ struct Neph::Config
 
   # The name of the main job, that is launched when no job name is specified in the command line.
   # The default is `main`.
-  property default_job : String = "main"
+  property main_job : String = "main"
 
   # The environment variables to set when the jobs are launched.
   property environment : Hash(String, String) = {} of String => String

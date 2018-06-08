@@ -1,7 +1,8 @@
 class Neph::Parser
   @filename : String
+  property main_job_override : String?
 
-  def initialize(@filename : String = "neph.yaml")
+  def initialize(@filename : String, @main_job_override = nil)
   end
 
   # Parse the YAML config
@@ -15,8 +16,10 @@ class Neph::Parser
     # it only contains the jobs.
     case parsed_main.size
     when 1
-      # Create the job list from the config.
-      return parse_jobs parsed_main[0]
+      # Create the job list with the default config.
+      config = Config.new
+      config.main_job = @main_job_override.as(String) if @main_job_override
+      return parse_jobs parsed_main[0], config
     when 2
       # First document is the config, second contains the job list.
       return parse_jobs parsed_main[1], parse_config(parsed_main[0])
@@ -89,12 +92,12 @@ class Neph::Parser
   # Parse the configuration part of the main file.
   # The config part is a YAML document, that comes first in the config file, before the job listing.
   # It may raise if the configuration has invalid syntax, or types.
-  # Higher level errors are not checked in this method (e.g. the job name specified by 'default_job' isn't in the job list).
+  # Higher level errors are not checked in this method (e.g. the job name specified by 'main_job' isn't in the job list).
   # an example config file:
   # ```yaml
   # # This is the config part.
   # interpreter: elvish
-  # default_job: build
+  # main_job: build
   # ---
   # # Here comes the job list.
   # ```
@@ -152,13 +155,13 @@ class Neph::Parser
         else
           raise ConfigError.new "The list of interpreter arguments have to be a sequence of strings."
         end
-      when "default_job"
+      when "main_job"
         # It have to be a String
         if value.is_a? String
           # Add it to the configuration.
-          config.default_job = value
+          config.main_job = value
         else
-          raise ConfigError.new "The name of the 'default_job' have to be a String, not a #{value.class}."
+          raise ConfigError.new "The name of the 'main_job' have to be a String, not a #{value.class}."
         end
       when "env"
         # It have to be a mapping.
@@ -182,11 +185,12 @@ class Neph::Parser
         # The type is String, so there is an invalid Neph configuration keyword.
 
         # The valid Neph configuration keywords.
-        keywords = {"include", "interpreter", "default_job", "env"}
+        keywords = {"include", "interpreter", "main_job", "env"}
 
         raise ConfigError.new "Invalid keyword: '#{key}'. " + Parser.construct_keyword_suggestion(key, keywords)
       end
     end
+    config.main_job = @main_job_override.as(String) if @main_job_override
     config
   end
 
