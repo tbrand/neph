@@ -22,6 +22,7 @@ class Neph::Job
   # If the job is required by multiple jobs, and this variable is `true`, then
   # the commands are evaluated each time the job is launched.
   property repeat : Bool = false
+  property ignore_error : Bool = false
   @waiting : Array(Channel::Buffered(Nil)) = [] of Channel::Buffered(Nil)
   @error : Nil | String = nil
 
@@ -89,7 +90,7 @@ class Neph::Job
       proc.input.close
 
       exit_status = proc.wait
-      unless exit_status.success?
+      unless exit_status.success? || @ignore_error
         if exit_status.signal_exit?
           @error = "The following command in the `#{@name}` job was terminated by SIG#{exit_status.exit_signal}:\n#{command}"
           return
