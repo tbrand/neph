@@ -44,6 +44,9 @@ class Program
     # If an exception is raised during running the jobs, the exit code is 3.
     begin
       job.run
+      if message = job.wait
+        raise message
+      end
     rescue exception
       STDERR.puts exception.message.colorize.red
       exit 3

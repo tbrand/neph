@@ -4,7 +4,7 @@ class Neph::Job
     Waiting
     # The job has currently running commands.
     Running
-    # The job is finished
+    # All commands finished successfully.
     Finished
   end
 
@@ -23,6 +23,7 @@ class Neph::Job
   # the commands are evaluated each time the job is launched.
   property repeat : Bool = false
   @waiting : Array(Channel::Buffered(Nil)) = [] of Channel::Buffered(Nil)
+  @error : Nil | String = nil
 
   def initialize(@name : String)
   end
@@ -39,18 +40,19 @@ class Neph::Job
   end
 
   # Wait for the job to finish.
-  def wait(from = "self")
-    return if @status.finished?
+  def wait
+    return @error if @status.finished?
     channel = Channel::Buffered(Nil).new 1
     @waiting << channel
     channel.receive
     @waiting.delete channel
+    return @error
   end
 
   def run
     wait if @status.running?
 
-    return if @status.finished? && !@repeat
+    return if (@status.finished? && !@repeat) || @error
 
     # Create job directory.
     Dir.mkdir_p @@data_dir + @name
@@ -68,32 +70,41 @@ class Neph::Job
     @sub_jobs.each do |job|
       spawn { job.run }
     end
-    @sub_jobs.each &.wait(@name)
+    @sub_jobs.each do |job|
+      @error = job.wait
+      return if @error
+    end
 
     # Run the commands.
     @commands.each do |command|
-      # Check if the interpreter accepts command on stdin, or as an argument.
-      if @interpreter.arguments.any? &.is_a? Symbol
-        # Replace every Symbol with the command.
-        arguments = @interpreter.arguments.map do |i|
-          i.is_a?(Symbol) ? command : i
+      # Replace every Symbol with the command.
+      arguments = @interpreter.arguments.map do |i|
+        i.is_a?(Symbol) ? command : i
+      end
+
+      # Launch the process. stdout, and stderr are redirected to the log files, and a pipe is opened to input (to print the command).
+      proc = Process.new @interpreter.command, arguments, input: Process::Redirect::Pipe, output: log_out, error: log_err
+
+      proc.input.print command if @interpreter.arguments.any? &.is_a? Symbol
+      proc.input.close
+
+      exit_status = proc.wait
+      unless exit_status.success?
+        if exit_status.signal_exit?
+          @error = "The following command in the `#{@name}` job was terminated by SIG#{exit_status.exit_signal}:\n#{command}"
+          return
+        else
+          @error = "The following command in the `#{@name}` job exited with #{exit_status.exit_code}:\n#{command}"
+          return
         end
-
-        Process.run @interpreter.command, arguments, output: log_out, error: log_err
-      else
-        # Launch the process. stdout, and stderr are redirected to the log files, and a pipe is opened to input (to print the command).
-        proc = Process.new @interpreter.command, @interpreter.arguments.map(&.as String), input: Process::Redirect::Pipe, output: log_out, error: log_err
-
-        proc.input.print command
-        proc.input.close
-
-        proc.wait
       end
     end
-
+  rescue exception
+    @error = exception.message
+  ensure
     # Close log files
-    log_out.close
-    log_err.close
+    log_out.try &.close
+    log_err.try &.close
 
     @status = Status::Finished
 
