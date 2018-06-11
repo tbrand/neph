@@ -90,9 +90,15 @@ class Neph::Parser::JobParser
         end
 
         job.ignore_error = value.as Bool
+      when "sequential"
+        unless value.is_a? Bool
+          raise JobError.new job_name, "The value of the 'sequential' parameter have to be a boolean value."
+        end
+
+        job.sequential = value.as Bool
       else
         # The valid parameters for a job.
-        valid_parameters = {"dependencies", "commands", "repeat", "ignore_error"}
+        valid_parameters = {"dependencies", "commands", "repeat", "ignore_error", "sequential"}
 
         raise "Wrong keyword ('#{key}') in the definition of the '#{job_name}' job. " + Parser.construct_keyword_suggestion key.as String, valid_parameters
       end

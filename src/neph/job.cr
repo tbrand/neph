@@ -23,6 +23,7 @@ class Neph::Job
   # the commands are evaluated each time the job is launched.
   property repeat : Bool = false
   property ignore_error : Bool = false
+  property sequential : Bool = false
   @waiting : Array(Channel::Buffered(Nil)) = [] of Channel::Buffered(Nil)
   @error : Nil | String = nil
 
@@ -70,7 +71,13 @@ class Neph::Job
     # Run all sub jobs in separate fibers, and wait for them.
     @sub_jobs.each do |job|
       spawn { job.run }
+      if @sequential
+        @error = job.wait
+        return if @error
+      end
     end
+    # If jobs are launched sequentially then it has no effect,
+    # because the result is already checked in the previous block.
     @sub_jobs.each do |job|
       @error = job.wait
       return if @error
