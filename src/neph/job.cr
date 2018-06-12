@@ -24,6 +24,8 @@ class Neph::Job
   property repeat : Bool = false
   property ignore_error : Bool = false
   property sequential : Bool = false
+  property environment : Hash(String, String) = {} of String => String
+
   @waiting : Array(Channel::Buffered(Nil)) = [] of Channel::Buffered(Nil)
   @error : Nil | String = nil
 
@@ -91,7 +93,7 @@ class Neph::Job
       end
 
       # Launch the process. stdout, and stderr are redirected to the log files, and a pipe is opened to input (to print the command).
-      proc = Process.new @interpreter.command, arguments, input: Process::Redirect::Pipe, output: log_out, error: log_err
+      proc = Process.new @interpreter.command, arguments, env: @environment, input: Process::Redirect::Pipe, output: log_out, error: log_err
 
       proc.input.print command if @interpreter.arguments.any? &.is_a? Symbol
       proc.input.close

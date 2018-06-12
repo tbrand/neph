@@ -163,10 +163,10 @@ class Neph::Parser
         else
           raise ConfigError.new "The name of the 'main_job' have to be a String, not a #{value.class}."
         end
-      when "env"
+      when "environment"
         # It have to be a mapping.
         unless value.is_a? Hash
-          raise ConfigError.new "The value of the environment variable definitions (the 'env' key) have to be a mapping."
+          raise ConfigError.new "The value of the environment variable definitions (the 'environment' key) have to be a mapping."
         end
 
         # It have to map String to String
@@ -174,7 +174,7 @@ class Neph::Parser
           # Add it to the config.
           value.each { |k, v| config.environment[k.as(String)] = v.as(String) }
         else
-          raise ConfigError.new "The value of the environment variable definitions (the 'env' key) have to be a mapping of string to string."
+          raise ConfigError.new "The value of the environment variable definitions (the 'environment' key) have to be a mapping of string to string."
         end
       else
         # It has invalid type.
@@ -185,7 +185,7 @@ class Neph::Parser
         # The type is String, so there is an invalid Neph configuration keyword.
 
         # The valid Neph configuration keywords.
-        keywords = {"include", "interpreter", "main_job", "env"}
+        keywords = {"include", "interpreter", "main_job", "environment"}
 
         raise ConfigError.new "Invalid keyword: '#{key}'. " + Parser.construct_keyword_suggestion(key, keywords)
       end

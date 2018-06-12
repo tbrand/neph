@@ -53,6 +53,7 @@ class Neph::Parser::JobParser
 
     # Apply configuration to Job.
     job.interpreter = @config.interpreter
+    job.environment = @config.environment
 
     job_definition.each do |key, value|
       case key
