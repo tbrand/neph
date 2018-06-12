@@ -97,9 +97,17 @@ class Neph::Parser::JobParser
         end
 
         job.sequential = value.as Bool
+      when "environment"
+        unless value.is_a?(Hash) && (value = value.as Hash).keys.all?(&.is_a? String) && value.values.all?(&.is_a? String)
+          raise JobError.new job_name, "The value.of the 'environment' parameter have to be a mapping of string to string."
+        end
+
+        value.each do |k, v|
+          job.environment[k.as(String)] = v.as(String)
+        end
       else
         # The valid parameters for a job.
-        valid_parameters = {"dependencies", "commands", "repeat", "ignore_error", "sequential"}
+        valid_parameters = {"dependencies", "commands", "repeat", "ignore_error", "sequential", "environment"}
 
         raise "Wrong keyword ('#{key}') in the definition of the '#{job_name}' job. " + Parser.construct_keyword_suggestion key.as String, valid_parameters
       end
