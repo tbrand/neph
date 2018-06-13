@@ -95,7 +95,7 @@ class Neph::Job
       # Launch the process. stdout, and stderr are redirected to the log files, and a pipe is opened to input (to print the command).
       proc = Process.new @interpreter.command, arguments, env: @environment, input: Process::Redirect::Pipe, output: log_out, error: log_err
 
-      proc.input.print command if @interpreter.arguments.any? &.is_a? Symbol
+      proc.input.print command if @interpreter.arguments.none? &.is_a? Symbol
       proc.input.close
 
       exit_status = proc.wait
