@@ -77,11 +77,12 @@ The [neph.yaml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.
 
 ## Contributing
 
-1. Fork it ( https://github.com/tbrand/neph/fork )
-2. Create your feature branch (git checkout -b my-new-feature)
-3. Commit your changes (git commit -am 'Add some feature')
-4. Push to the branch (git push origin my-new-feature)
-5. Create a new Pull Request
+_**Pull requests are welcome.**_
+
+**Please set up the `pre-commit` Git hook before starting:**
+```bash
+ln -s ../../pre-commit .git/hooks/pre-commit
+```
 
 ## Contributors
 
