@@ -7,6 +7,7 @@ class Program
     # Set up a command line option parser.
     opt_parser = OptionParser.new
     opt_parser.banner = "Usage: neph [options] [job name]"
+    opt_parser.on "-v", "--version", "Show software version" { STDERR.puts VERSION; exit 0 }
     opt_parser.on "-h", "--help", "Show this help message" { STDERR.puts opt_parser; exit 0 }
     opt_parser.unknown_args do |before, after|
       # Concatenate the two arrays (arguments before and after `--` argument).
