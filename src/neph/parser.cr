@@ -38,7 +38,7 @@ class Neph::Parser
     raise Error.new "The job list have to be a mapping." unless raw_main.as_h?
 
     # Job names have to be strings.
-    raise Error.new "Job names have to be strings." unless raw_main.as_h.keys.all? &.is_a? String
+    raise Error.new "Job names have to be strings." unless raw_main.as_h.keys.all? &.as_s?
 
     # This will contain all YAML document with job definitions.
     documents : Array(YAML::Any) = [raw_main]
@@ -48,22 +48,23 @@ class Neph::Parser
       documents << parse_included_file filename
     end
 
-    # Every item in 'documents' contains a Hash(YAML::Type, YAML::Type), the types of the keys
-    # are checked (every key is a String), so restrict type of keys to it: Hash(String, YAML::Type)
+    # Every item in 'documents' contains a Hash(YAML::Any, YAML::Any), the types of the keys
+    # are checked (every underlying value is a String), so restrict type of keys to it: Hash(String, YAML::Any)
     # Every document in 'documents' will be merged to this Hash.
-    job_list = {} of String => YAML::Type
+    job_list = {} of String => YAML::Any
 
     # Merge all document from `documents`, and check for duplicated job names.
     documents.each do |doc|
       # Iterate over each key-value pair in job list.
+      # Keys and values are `YAML::Any`, but keys contains strings.
       doc.as_h.each do |job_name, definition|
         # Check for duplicated job names.
-        if job_list.has_key? job_name.as(String)
+        if job_list.has_key? job_name.as_s
           # There is a duplicated job name.
           raise "Duplicated job name: #{job_name}"
         else
           # Add job name and job definition to the merged Hash.
-          job_list[job_name.as(String)] = definition
+          job_list[job_name.as_s] = definition
         end
       end
     end
@@ -74,16 +75,17 @@ class Neph::Parser
 
   private def parse_included_file(filename : String)
     # Read and parse content of 'filename'.
-    parsed_doc = YAML.parse File.read filename
+    parsed_doc : YAML::Any = YAML.parse File.read filename
 
     # The job list have to be a Hash.
     # Keys are the job names, and the values are the job definitions.
     raise "Error in #{filename}: The job list have to be a mapping." unless parsed_doc.as_h?
 
     # Job names have to be strings, job definitions have to be mappings.
+    # `parsed_doc` is a `Hash(YAML::Any, YAML::Any)`
     parsed_doc.as_h.each do |job_name, definition|
-      unless job_name.is_a? String
-        raise "Error in #{filename}: Job names have to be strings. #{job_name} is a #{job_name.class}"
+      unless job_name.as_s?
+        raise "Error in #{filename}: Job names have to be strings. #{job_name.raw} is a #{job_name.raw.class}"
       end
     end
     parsed_doc
@@ -104,29 +106,38 @@ class Neph::Parser
   private def parse_config(raw : YAML::Any) : Config
     config = Config.new
 
-    # If the document is valid, `config` will be a Hash(YAML::Type, YAML::Type), raise otherwise.
+    # If the document is valid, `config` will be a Hash(YAML::Any, YAML::Any), raise otherwise.
     unless raw_config = raw.as_h?
       raise "Invalid configuration part (first YAML document). It have to be a mapping, instead of #{raw.raw.class}"
     end
 
+    # `raw_config` : Hash(YAML::Any, YAML::Any)
     raw_config.each do |key, value|
+      # Check type of `key`.
+      key = key.as_s?
+      unless key
+        raise ConfigError.new "Every key have to be a string. '#{key}' is a '#{key.class}'"
+      end
+
       # Search for a valid Neph config key.
       case key
       # This have to be a list of paths.
       # Shell style globs are allowed, these will be expanded later.
       when "include"
         # It have to be an Array.
-        unless value.is_a?(Array)
+        unless value.as_a?
           raise ConfigError.new "The list of included files have to be a sequence."
         end
 
+        value = value.as_a
+
         # Every element of the array have to be String
-        if value.all?(&.is_a? String)
+        if value.all? &.as_s?
           # Add it to the configuration.
-          config.include = value.map &.as(String)
+          config.include = value.map &.as_s
         else
           # Find the elements that has incorrect types (other than String).
-          incorrect_types = value.reject { |i| i.is_a? String }
+          incorrect_types = value.reject { |i| i.as_s? }
 
           # This string will be appended to the error message.
           # It will explain to the user what elements has
@@ -140,10 +151,10 @@ class Neph::Parser
         end
       when "interpreter"
         # If it is an array, then every element of the it have to be String.
-        if value.is_a?(Array) && value.all?(&.is_a? String)
-          # Type inference don't work here (value.all? &.is_a? String), so it requires a manual workaround.
-          config.interpreter = Job::Interpreter.new *parse_interpreter_arguments(value.map(&.as String))
-        elsif value.is_a?(String) # If it is a String, then it have to be one of the builtins.
+        if value.as_a? && value.as_a.all?(&.as_s?)
+          # Type inference don't work here (value.all? &.as_s?), so it requires a manual workaround.
+          config.interpreter = Job::Interpreter.new *parse_interpreter_arguments(value.as_a.map &.as_s)
+        elsif value = value.as_s? # If it is a String, then it have to be one of the builtins.
           # There is no builtin with this name.
           unless Job::Interpreter::BUILTINS.has_key? value
             raise ConfigError.new "If the `interpreter` config key has a String value, \
@@ -157,7 +168,7 @@ class Neph::Parser
         end
       when "main_job"
         # It have to be a String
-        if value.is_a? String
+        if value = value.as_s?
           # Add it to the configuration.
           config.main_job = value
         else
@@ -165,27 +176,19 @@ class Neph::Parser
         end
       when "environment"
         # It have to be a mapping.
-        unless value.is_a? Hash
+        unless value.as_h?
           raise ConfigError.new "The value of the environment variable definitions (the 'environment' key) have to be a mapping."
         end
 
         # It have to map String to String
-        if value.keys.all?(&.is_a? String) && value.values.all?(&.is_a? String)
-          # Add it to the config.
-          value.each { |k, v| config.environment[k.as(String)] = v.as(String) }
+        if (value = value.as_h).keys.all?(&.as_s?) && value.values.all?(&.as_s?)
+          # `value` is a `Hash(YAML::Any, YAML::Any)`
+          value.each { |k, v| config.environment[k.as_s] = v.as_s }
         else
           raise ConfigError.new "The value of the environment variable definitions (the 'environment' key) have to be a mapping of string to string."
         end
-      else
-        # It has invalid type.
-        unless key.is_a? String
-          raise ConfigError.new "Every key have to be a string. '#{key}' is a '#{key.class}'"
-        end
-
-        # The type is String, so there is an invalid Neph configuration keyword.
-
-        # The valid Neph configuration keywords.
-        keywords = {"include", "interpreter", "main_job", "environment"}
+      else                                                               # There is an invalid Neph configuration keyword.
+        keywords = {"include", "interpreter", "main_job", "environment"} # The valid configuration keywords.
 
         raise ConfigError.new "Invalid keyword: '#{key}'. " + Parser.construct_keyword_suggestion(key, keywords)
       end

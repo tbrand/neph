@@ -1,9 +1,9 @@
 class Neph::Parser::JobParser
-  @raw_job_list : Hash(String, YAML::Type)
+  @raw_job_list : Hash(String, YAML::Any)
   @config : Config
   @job_list : Hash(String, Job) = {} of String => Job
 
-  def initialize(@raw_job_list : Hash(String, YAML::Type), @config : Config)
+  def initialize(@raw_job_list : Hash(String, YAML::Any), @config : Config)
   end
 
   def parse_jobs
@@ -40,12 +40,12 @@ class Neph::Parser::JobParser
     end
 
     # Type check.
-    raise JobError.new job_name, "Job definition have to be a mapping." unless @raw_job_list[job_name].is_a? Hash
+    raise JobError.new job_name, "Job definition have to be a mapping." unless @raw_job_list[job_name].as_h?
 
-    job_definition = @raw_job_list[job_name].as Hash
+    job_definition = @raw_job_list[job_name].as_h
 
     # Type check of keys
-    unless job_definition.keys.all? &.is_a? String
+    unless job_definition.keys.all? &.as_s?
       raise JobError.new job_name, "All keys have to be String in job definition."
     end
 
@@ -56,54 +56,65 @@ class Neph::Parser::JobParser
     job.environment = @config.environment
 
     job_definition.each do |key, value|
+      # `key` is a `YAML::Any`, but it is checked earlier
+      # that the underlying raw value is a `String`
+      key = key.as_s
+
       case key
       when "commands"
         # Type check.
-        unless value.is_a? Array && (value = value.as Array).all?(&.is_a? String)
+        value = value.as_a?
+        unless value && value.all? &.as_s?
           raise JobError.new job_name, "Command list have to be a sequence of strings."
         end
 
-        # Add it to the job.
-        job.commands = value.map &.as(String)
+        # `value` is a `Array(YAML::Any)`
+        job.commands = value.map &.as_s
       when "dependencies"
-        # Type check.
-        unless value.is_a? Array && (value = value.as Array).all?(&.is_a? String)
+        # Type check, `value` has to be an array,
+        # and all items has to be strings.
+        value = value.as_a?
+        unless value && value.all? &.as_s?
           raise JobError.new job_name, "Dependency list have to be a sequence of strings."
         end
 
         # Parse subjobs recursively
         dependencies = [] of Job
         value.each do |dependency_name|
-          dependencies << parse_job_recursively (dependency_stack << job_name), dependency_name.as String
+          dependencies << parse_job_recursively (dependency_stack << job_name), dependency_name.as_s
         end
 
         # Add it to the job
         job.sub_jobs = dependencies
       when "repeat"
-        unless value.is_a? Bool
+        unless value.raw.is_a? Bool
           raise JobError.new job_name, "The value of the 'repeat' parameter have to be a boolean value."
         end
 
-        job.repeat = value.as Bool
+        job.repeat = value.raw.as Bool
       when "ignore_error"
-        unless value.is_a? Bool
+        unless value.raw.is_a? Bool
           raise JobError.new job_name, "The value of the 'ignore_error' parameter have to be a boolean value."
         end
 
-        job.ignore_error = value.as Bool
+        job.ignore_error = value.raw.as Bool
       when "sequential"
-        unless value.is_a? Bool
+        unless value.raw.is_a? Bool
           raise JobError.new job_name, "The value of the 'sequential' parameter have to be a boolean value."
         end
 
-        job.sequential = value.as Bool
+        job.sequential = value.raw.as Bool
       when "environment"
-        unless value.is_a?(Hash) && (value = value.as Hash).keys.all?(&.is_a? String) && value.values.all?(&.is_a? String)
+        value = value.as_h?
+        unless value && value.keys.all?(&.as_s?) && value.values.all?(&.as_s?)
           raise JobError.new job_name, "The value.of the 'environment' parameter have to be a mapping of string to string."
         end
 
+        # `value` is a `Hash(YAML::Any, YAML::Any)`
         value.each do |k, v|
-          job.environment[k.as(String)] = v.as(String)
+          # The type of `k` and `v` is `YAML::Any`, but it is checked
+          # earlier that all underlying values are strings.
+          job.environment[k.as_s] = v.as_s
         end
       else
         # The valid parameters for a job.
