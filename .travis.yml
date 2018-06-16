@@ -10,10 +10,10 @@ env:
   - secure: QnlssHorLhdtTQXH6AQD6lTaZV7cIHq4aH35yG2c7YizLGo6RcssCTSuIhnfB35tu0tgbCSlCGZyA6hUg3CQzvgSbflAo2JiY2q/1jyLUuPJRtH+rw1k14/gKqxLvQdh7Fh83MIivusaF7lej5O+IIbKZodtFreyRqD4Qu0JUQwNC2vtGyQVBU192mJ/1aQM2xp9xs92ZOQpkP0iXsGufHfQPZse6ZH0FpHHgz3ThWnb3qPm/Hy/FXXvoGkNC6c6VSUUgHPReHfipLtQOIptA8LJdqOcHfurMrvhoCZHLEWusDT2rR6aHTpoBTS2faeEllGtKhsi5xjky1UfG3/vjoiduMz0E91uK4kcpxHwQPGf8ZDSK8elb+/zNwogGmDBmgnPjqmeibzUmWxViXIKMXp5Vo7MM4SUUQUmjORKE3Eaf8ddfa8HkuGTjjP/Z+NuoYGvtCmjGpiKWIdRnTWo7ScKsaV0hAkNPq7Bm8LyAw2Ia1XrCvO6JRdYQYIkqgw+cT2TkpjREle8AcPYxT0OWfsHRlI1MI44ZZSgiTk6YVRmm0K8Vg0JHfjSWFVKt/eClM3nMDyYYst51aKb8XACo30B4l9noUvVKYLYRxU8EJ4VtTOfVW/VFDhAPoHxI8XZ7e/nlFAkr9G67agpCYm/oGGmty+7TlvalQeMcD2RW9Q=
 
 install:
-  shards build --release
+  shards build
 
 script:
-  ./bin/neph test --mode=CI
+  - crystal tool format --check
 
 before_deploy:
   - ruby ci/release.rb
