@@ -10,9 +10,6 @@
 	<a href="https://github.com/tbrand/neph/issues"><img src="https://img.shields.io/github/issues/tbrand/neph.svg?style=flat" /></a>
 </p>
 
-<p align="center">
-	<img src="https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif" width="700" />
-</p>
 
 - A modern command line job processor :rocket:
 - Can execute jobs concurrently. :rocket:
@@ -53,7 +50,9 @@ See the example build file: [`example/neph.yaml`](https://github.com/tbrand/neph
   - You can learn Crystal. It's a very good language. https://crystal-lang.org/
   - Contribute to [`go-md2man`](https://github.com/cpuguy83/go-md2man) (written in Go), which is used to generate the man page.
   - Contribute to the tools that we use in development of Neph:  
+     
      |project                                                              |lang  |
+     |:--------------------------------------------------------------------|:-----|
      |[Kakoune](http://kakoune.org), a very good editor                    |C++   |
      |[Elvish](https://elvish.io), a modern and user friendly shell        |Go    |
      |[slit](https://github.com/tigrawap/slit), a modern pager             |Go    |
@@ -62,7 +61,7 @@ See the example build file: [`example/neph.yaml`](https://github.com/tbrand/neph
 
 #### **If you know Crystal**
 
-**Pull requests are welcome.**
+**Pull requests are welcome.**  
 **Please set up the `pre-commit` Git hook before starting:**
 ```bash
 ln -s ../../pre-commit .git/hooks/pre-commit
