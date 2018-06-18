@@ -116,9 +116,16 @@ class Neph::Parser::JobParser
           # earlier that all underlying values are strings.
           job.environment[k.as_s] = v.as_s
         end
+      when "directory"
+        value = value.as_s?
+        unless value
+          raise JobError.new job_name, "The value of the 'directory' parameter has to be a String."
+        end
+
+        job.directory = value
       else
         # The valid parameters for a job.
-        valid_parameters = {"dependencies", "commands", "repeat", "ignore_error", "sequential", "environment"}
+        valid_parameters = {"dependencies", "directory", "commands", "repeat", "ignore_error", "sequential", "environment"}
 
         raise "Wrong keyword ('#{key}') in the definition of the '#{job_name}' job. " + Parser.construct_keyword_suggestion key.as String, valid_parameters
       end
