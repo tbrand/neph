@@ -35,7 +35,6 @@ class Program
     # If an exception is raised during build file parsing, the exit code is 2.
     begin
       job = Parser.new(@filename, @job_name).parse
-      p job
     rescue exception
       # Any exception that is raised during the parsing.
       STDERR.puts exception.message.colorize.red
