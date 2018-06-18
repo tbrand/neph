@@ -1,2 +1,0 @@
-require "colorize"
-require "./message/*"
