@@ -1,6 +1,8 @@
 language: crystal
 
-os: osx
+os:
+  - linux
+  - osx
 
 crystal:
   - latest
@@ -26,4 +28,4 @@ deploy:
   skip_cleanup: true
   on:
     tags: false
-    branch: master
+    branch: release
