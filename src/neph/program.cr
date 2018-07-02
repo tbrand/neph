@@ -9,6 +9,13 @@ class Program
     opt_parser.banner = "Usage: neph [options] [job name]"
     opt_parser.on "-v", "--version", "Show software version" { STDERR.puts VERSION; exit 0 }
     opt_parser.on "-h", "--help", "Show this help message" { STDERR.puts opt_parser; exit 0 }
+    opt_parser.on "-f FILE", "--file FILE", "Specify an alternative file" do |filename|
+      unless File.exists?(filename)
+        STDERR.puts "File does not exists"
+        raise OptionParser::Exception.new
+      end
+      @filename = filename
+    end
     opt_parser.unknown_args do |before, after|
       # Concatenate the two arrays (arguments before and after `--` argument).
       args = before + after
