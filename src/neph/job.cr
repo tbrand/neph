@@ -26,6 +26,8 @@ class Neph::Job
   property sequential : Bool = false
   property environment : Hash(String, String) = {} of String => String
   property directory : String | Nil = nil
+  property before_command : String = ""
+  property after_command : String = ""
 
   @waiting : Array(Channel::Buffered(Nil)) = [] of Channel::Buffered(Nil)
   @error : Nil | String = nil
@@ -90,7 +92,7 @@ class Neph::Job
     @commands.each do |command|
       # Replace every Symbol with the command.
       arguments = @interpreter.arguments.map do |i|
-        i.is_a?(Symbol) ? command : i
+        i.is_a?(Symbol) ? before_command + command + after_command : i
       end
 
       # Launch the process. stdout, and stderr are redirected to the log files, and a pipe is opened to input (to print the command).

@@ -75,6 +75,20 @@ default_job:
         exit 1
       }
     - git push
+
+  # A string that is prepended to each command.
+  # This can be used for example to set environment variables from files.
+  # The string is prepended without inserting a newline between it and the command.
+  # type:          string
+  # default value: empty
+  before_command: E:SHELL = (cat shell_name.txt)
+
+  # The same as 'before_command', but this string is appended to the command.
+  # This can be used for example to ignore non-zero exit code of launched program
+  # by explicitly exiting with zero.
+  # Don't forget the newline if needed.
+  after_command: ; exit 0
+
   # The list of environment values set only for this job.
   # type:          mapping of string to string
   # default value: empty
@@ -109,7 +123,7 @@ ignore_error_job:
 non_repeated_job:
   commands:
     - tokei
-  # A job is repeated if it is required by more than one job (in this case, from `default_job`, `sequential_job`  and `ignore_error_job`).
+  # A job is repeated if it is required by more than one job (in this case, from `default_job`, `sequential_job` and `ignore_error_job`).
   # If the commands should only run once, set this parameter to false.
   # type:          bool
   # default value: true
