@@ -95,11 +95,6 @@ default_job:
   environment:
     GIT_PAGER: slit
 
-  # The directory in which commands are launched.
-  # type:          string
-  # default value: "./"
-  directory: src/
-
   # The list of jobs that are required by this job.
   # These jobs are launched before this job.
   # type:          array of strings

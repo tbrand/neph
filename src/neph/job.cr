@@ -25,7 +25,6 @@ class Neph::Job
   property ignore_error : Bool = false
   property sequential : Bool = false
   property environment : Hash(String, String) = {} of String => String
-  property directory : String | Nil = nil
   property before_command : String = ""
   property after_command : String = ""
 
@@ -96,7 +95,7 @@ class Neph::Job
       end
 
       # Launch the process. stdout, and stderr are redirected to the log files, and a pipe is opened to input (to print the command).
-      proc = Process.new @interpreter.command, arguments, env: @environment, input: Process::Redirect::Pipe, output: log_out, error: log_err, chdir: @directory
+      proc = Process.new @interpreter.command, arguments, env: @environment, input: Process::Redirect::Pipe, output: log_out, error: log_err
 
       proc.input.print command if @interpreter.arguments.none? &.is_a? Symbol
       proc.input.close
