@@ -16,7 +16,7 @@
 #   - sh
 #   - bash
 #   - zsh
-#   - elvish (By the way, this is a great shell, check it out: https://elvish.io)
+#   - elvish (By the way, this is a great shell, check it out: https://elv.sh)
 # These shells has built in support in Neph.
 #
 # If it is an array, then the first item is the name of the executable file,

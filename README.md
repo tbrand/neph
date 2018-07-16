@@ -54,7 +54,7 @@ See the example build file: [`example/neph.yaml`](https://github.com/tbrand/neph
      |project                                                              |lang  |
      |:--------------------------------------------------------------------|:-----|
      |[Kakoune](http://kakoune.org), a very good editor                    |C++   |
-     |[Elvish](https://elvish.io), a modern and user friendly shell        |Go    |
+     |[Elvish](https://elv.sh), a modern and user friendly shell           |Go    |
      |[slit](https://github.com/tigrawap/slit), a modern pager             |Go    |
      |[exa](https://the.exa.website/), a modern replacement for `ls`       |Rust  |
      |[fd](https://github.com/sharkdp/fd), a modern replaement for `find`  |Rust  |
