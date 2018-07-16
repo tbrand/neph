@@ -53,7 +53,6 @@ class Neph::Parser::JobParser
 
     # Apply configuration to Job.
     job.interpreter = @config.interpreter
-    job.environment = @config.environment
 
     job_definition.each do |key, value|
       # `key` is a `YAML::Any`, but it is checked earlier
@@ -104,18 +103,6 @@ class Neph::Parser::JobParser
         end
 
         job.sequential = value.raw.as Bool
-      when "environment"
-        value = value.as_h?
-        unless value && value.keys.all?(&.as_s?) && value.values.all?(&.as_s?)
-          raise JobError.new job_name, "The value.of the 'environment' parameter have to be a mapping of string to string."
-        end
-
-        # `value` is a `Hash(YAML::Any, YAML::Any)`
-        value.each do |k, v|
-          # The type of `k` and `v` is `YAML::Any`, but it is checked
-          # earlier that all underlying values are strings.
-          job.environment[k.as_s] = v.as_s
-        end
       when "before_command"
         value = value.as_s?
         unless value
@@ -132,7 +119,7 @@ class Neph::Parser::JobParser
         job.after_command = value
       else
         # The valid parameters for a job.
-        valid_parameters = {"after_command", "before_command", "dependencies", "commands", "repeat", "ignore_error", "sequential", "environment"}
+        valid_parameters = {"after_command", "before_command", "dependencies", "commands", "repeat", "ignore_error", "sequential"}
 
         raise "Wrong keyword ('#{key}') in the definition of the '#{job_name}' job. " + Parser.construct_keyword_suggestion key.as String, valid_parameters
       end
