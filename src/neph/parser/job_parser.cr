@@ -9,7 +9,7 @@ class Neph::Parser::JobParser
   def parse_jobs
     # Check if @config.main_job exists in job list.
     unless @raw_job_list.has_key? @config.main_job
-      raise "The job list doesn't contain the '#{@config.main_job}' job (specified with the 'main_job' config option)."
+      raise "The job list doesn't contain the '#{@config.main_job}' job#{@config.main_job == "main" ? "" : " (specified with the 'main_job' config option)"}."
     end
 
     # The dependency stack is empty.
