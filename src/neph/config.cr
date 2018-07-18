@@ -8,9 +8,6 @@ struct Neph::Config
   # The default is `main`.
   property main_job : String = "main"
 
-  # The environment variables to set when the jobs are launched.
-  property environment : Hash(String, String) = {} of String => String
-
   # A list of paths that will be included in the config file.
   # Shell-style globs are allowed.
   property include : Array(String) = [] of String

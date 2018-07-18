@@ -193,12 +193,12 @@ class Neph::Parser
         # It have to map String to String
         if (value = value.as_h).keys.all?(&.as_s?) && value.values.all?(&.as_s?)
           # `value` is a `Hash(YAML::Any, YAML::Any)`
-          value.each { |k, v| config.environment[k.as_s] = v.as_s }
+          value.each { |k, v| ENV[k.as_s] = v.as_s }
         else
           raise ConfigError.new "The value of the environment variable definitions (the 'environment' key) have to be a mapping of string to string."
         end
-      else                                                               # There is an invalid Neph configuration keyword.
-        keywords = {"include", "interpreter", "main_job", "environment"} # The valid configuration keywords.
+      else                                                # There is an invalid Neph configuration keyword.
+        keywords = {"include", "interpreter", "main_job"} # The valid configuration keywords:
 
         raise ConfigError.new "Invalid keyword: '#{key}'. " + Parser.construct_keyword_suggestion(key, keywords)
       end

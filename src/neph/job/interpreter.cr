@@ -11,7 +11,7 @@ struct Neph::Job::Interpreter
   # - `sh`
   # - `bash`
   # - `zsh`
-  # - [`elvish`](https://elvish.io)
+  # - [`elvish`](https://elv.sh)
   #
   # Elvish can't read commands from standard input,
   # so it is passed to it as an argument.
