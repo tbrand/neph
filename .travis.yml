@@ -27,5 +27,5 @@ deploy:
   file: bin/neph
   skip_cleanup: true
   on:
-    tags: false
+    tags: true
     branch: release
