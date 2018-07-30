@@ -2,17 +2,7 @@ class Neph::Parser
   @filename : String
   property main_job_override : String?
 
-  def initialize(path : String, @main_job_override = nil)
-    raise "No such file: #{path}" unless File.exists? path
-    raise "Unable to open '#{path}'" unless File.readable? path
-
-    # Change directory to the dirname of the alternative_file path.
-    # This is needed because the `include` config option uses paths
-    # relative to the build file, and also all commands are launched
-    # from the directory the build file is in.
-    Dir.cd File.dirname path
-
-    @filename = File.basename path
+  def initialize(@filename : String, @main_job_override = nil)
   end
 
   # Parse the YAML config

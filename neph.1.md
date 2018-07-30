@@ -17,9 +17,6 @@ Neph is a command line job processor which can execute jobs concurrently, and ca
 
 **-h**, **--help** Show a help message.
 
-**-f** *FILE*, **--file** *FILE*
-      Path to the build file (default: 'neph.yaml')
-
 # INCOMPATIBLE CHANGES
 **0.1.18**
   - The *-j | --job* option were removed. Job names can be specified without an option: **neph** [*job_name*]
