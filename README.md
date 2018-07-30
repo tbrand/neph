@@ -14,29 +14,37 @@
 	<img src="https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif" width="700" />
 </p>
 
-- A modern command line job processor :rocket:
+- A modern command line job processor written in Crystal :rocket:
 - Can execute jobs concurrently. :rocket:
-- Alternative to `make` :rocket:
+- Can be substitute for `make` command. :rocket:
 
 ## Installation
 
-#### Arch Linux
-Available in the AUR: [`neph-git`](https://aur.archlinux.org/packages/neph-git/)
+### Arch Linux
+Use your favourite AUR helper.  
+Package name: [`neph-git`](https://aur.archlinux.org/packages/neph-git/)
 
-#### Mac
+### Mac
 You can install Neph with `brew`.
 ```bash
 $ brew tap tbrand/homebrew-neph
 $ brew install neph
 ```
 
-#### Manual
+### Manual
 Build dependencies:
 - `crystal` and `shards` for building the binary
-- [`go-md2man`](https://github.com/cpuguy83/go-md2man) for generating the man page
+- `go-md2man` for generating the man page
 
 It needs `libyaml` to be installed.
 
+If you have a previous version of `neph` installed:
+```bash
+$ git clone https://github.com/tbrand/neph
+$ cd neph
+$ neph           # man page will be at neph.1, binary will be at bin/neph
+```
+If you don't have a previous version of `neph` installed:
 ```bash
 $ git clone https://github.com/tbrand/neph
 $ cd neph
@@ -46,33 +54,34 @@ $ bin/neph man    # Generate man page. It will be located at neph.1
 
 ## Usage
 
-See the example build file: [`example/neph.yaml`](https://github.com/tbrand/neph/blob/master/example/neph.yaml)
+All features for neph.yaml is written in [sample/neph.yaml](https://github.com/tbrand/neph/blob/master/sample/neph.yaml). So please refer for the details.
 
-## Contributing
-#### **You can contribute even if you don't know Crystal. How?**
-  - You can learn Crystal. It's a very good language. https://crystal-lang.org/
-  - Contribute to [`go-md2man`](https://github.com/cpuguy83/go-md2man) (written in Go), which is used to generate the man page.
-  - Contribute to the tools that we use in development of Neph:  
-     |project                                                              |lang  |
-     |[Kakoune](http://kakoune.org), a very good editor                    |C++   |
-     |[Elvish](https://elvish.io), a modern and user friendly shell        |Go    |
-     |[slit](https://github.com/tigrawap/slit), a modern pager             |Go    |
-     |[exa](https://the.exa.website/), a modern replacement for `ls`       |Rust  |
-     |[fd](https://github.com/sharkdp/fd), a modern replaement for `find`  |Rust  |
-
-#### **If you know Crystal**
-
-**Pull requests are welcome.**
-**Please set up the `pre-commit` Git hook before starting:**
-```bash
-ln -s ../../pre-commit .git/hooks/pre-commit
-```
+Wiki is also maintained as a document. Here is a full features.
+ - [Execute command from neph](https://github.com/tbrand/neph/wiki/Execute-command-from-neph)
+ - [Define dependencies between jobs](https://github.com/tbrand/neph/wiki/Define-dependencies-between-jobs)
+ - [Working directory](https://github.com/tbrand/neph/wiki/Working-directory)
+ - [Specify sources](https://github.com/tbrand/neph/wiki/Specify-sources)
+ - [Ignoring errors](https://github.com/tbrand/neph/wiki/Ignoring-errors)
+ - [Hide executing command](https://github.com/tbrand/neph/wiki/Hide-executing-command)
+ - [Set a job result to env vars](https://github.com/tbrand/neph/wiki/Set-a-job-result-to-env-vars)
+ - [Import other configurations](https://github.com/tbrand/neph/wiki/Import-other-configurations)
+ - [Command line options](https://github.com/tbrand/neph/wiki/Command-line-options)
+ - [Log locations](https://github.com/tbrand/neph/wiki/Log-locations)
+ - [Log modes](https://github.com/tbrand/neph/wiki/Log-modes)
 
 ## Use cases
 
 Neph is used in [which_is_the_fastest](https://github.com/tbrand/which_is_the_fastest).  
 The build time is **reduced from 102[sec] to 33[sec]**.  
 The [neph.yaml](https://github.com/tbrand/which_is_the_fastest/blob/master/neph.yaml) is here.
+
+## Contributing
+
+1. Fork it ( https://github.com/tbrand/neph/fork )
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create a new Pull Request
 
 ## Contributors
 

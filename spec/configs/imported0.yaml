@@ -1,0 +1,3 @@
+imported0:
+  command:
+    echo "OK from imported0"

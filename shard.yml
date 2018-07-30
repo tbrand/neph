@@ -1,13 +1,17 @@
 name: neph
+<<<<<<< HEAD
 version: 0.2.3
+=======
+version: 0.1.22
+>>>>>>> parent of bb50157... Merge pull request #63 from tbrand/config_redesign
 
 authors:
   - Taichiro Suzuki <taichiro0709@gmail.com>
 
 targets:
     neph:
-      main: src/neph.cr
+      main: src/bin/neph_bin.cr
 
-crystal: 0.25
+crystal: 0.24.2
 
 license: MIT

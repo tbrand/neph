@@ -1,0 +1,12 @@
+
+ignore0:
+  command:
+    echo "OK"
+  depends_on:
+    ignore1
+
+ignore1:
+  command:
+    hogehoge
+  ignore_error:
+    true

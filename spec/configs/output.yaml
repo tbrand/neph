@@ -1,0 +1,21 @@
+output:
+  command:
+    echo "The result is $RESULT"
+  depends_on:
+    -
+      job: run_crystal
+      env: RESULT
+    - job: just_echo2
+    - just_echo
+
+run_crystal:
+  command:
+    crystal eval "puts 1 + 3"
+
+just_echo:
+  command:
+    echo "I'm echo"
+
+just_echo2:
+  command:
+    echo "I'm second echo"

@@ -1,0 +1,5 @@
+up_to_date:
+  command:
+    date
+  src:
+    src/neph.cr
