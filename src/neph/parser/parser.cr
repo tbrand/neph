@@ -1,12 +1,10 @@
 module Neph
   module Parser
-    def parse_yaml(path : String) : YAML::Type
+    def parse_yaml(path : String) : Hash(YAML::Any, YAML::Any)
       abort error("yaml doesn't exist at #{path}") unless File.exists?(path)
       abort error("#{path} is not a file") unless File.file?(path)
 
-      config = YAML.parse(File.read(path)).as_h
-
-      unless config.is_a?(YHash)
+      unless config = YAML.parse(File.read(path)).as_h?
         abort error("Invalid structure in '#{path}'")
       end
 
@@ -17,12 +15,12 @@ module Neph
       config = parse_yaml(path)
 
       if config.has_key?("import")
-        if config["import"].is_a?(YArray)
-          config["import"].as(YArray).each do |import|
-            config.merge!(parse_yaml(import.as(String)))
+        if imports = config["import"].as_a?
+          imports.each do |import|
+            config.merge!(parse_yaml(import.as_s))
           end
-        elsif config["import"].is_a?(String)
-          config.merge!(parse_yaml(config["import"].as(String)))
+        elsif import = config["import"].as_s?
+          config.merge!(parse_yaml(config["import"].as_s))
         end
       end
 
@@ -30,43 +28,48 @@ module Neph
       job
     end
 
-    def create_job(config : YAML::Type, job_name : String, parent_job : Job? = nil) : Job
+    def create_job(config : Hash(YAML::Any, YAML::Any), job_name : String, parent_job : Job? = nil) : Job
       unless config.has_key?(job_name)
         abort error("'#{job_name}' is not found")
       end
 
-      job_config = config[job_name].as(YHash)
+      job_config = config[job_name].as_h
       job_command = if job_config.has_key?("command")
-                      job_config["command"].as(String)
+                      job_config["command"].as_s
                     else
                       ""
                     end
 
       job = Job.new(job_name, job_command, parent_job)
-      job.dir = job_config["dir"].as(String) if job_config.has_key?("dir")
+      job.dir = job_config["dir"].as_s if job_config.has_key?("dir")
       job.ignore_error = job_config["ignore_error"] ? true : false if job_config.has_key?("ignore_error")
       job.hide = job_config["hide"] ? true : false if job_config.has_key?("hide")
 
       if job_config.has_key?("src")
-        if job_config["src"].is_a?(YArray)
-          job_config["src"].as(YArray).each do |source|
-            job.add_sources(source_files(source.as(String)))
+        if srcs = job_config["src"].as_a?
+          srcs.each do |source|
+            job.add_sources(source_files(source.as_s))
           end
         else
-          job.add_sources(source_files(job_config["src"].as(String)))
+          job.add_sources(source_files(job_config["src"].as_s))
         end
       end
 
       if job_config.has_key?("depends_on")
-        if job_config["depends_on"].is_a?(YArray)
-          job_config["depends_on"].as(YArray).each do |sub_job|
-            abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray | Nil)
-            add_sub_job(config, job, sub_job.as(String | YHash))
+        if dependencies = job_config["depends_on"].as_a?
+          job_config["depends_on"].as_a.each do |sub_job|
+            if sub_job_h = sub_job.as_h?
+              add_sub_job(config, job, sub_job_h)
+            elsif sub_job_s = sub_job.as_s?
+              add_sub_job(config, job, sub_job_s)
+            else
+              abort "Invalid structure in #{job_config["depends_on"]}'s dependencies"
+            end
           end
+        elsif depedency = job_config["depends_on"].as_s?
+          add_sub_job(config, job, depedency)
         else
-          sub_job = job_config["depends_on"]
-          abort "Invalid structure in #{job_name}'s dependencies" if sub_job.is_a?(YArray | Nil)
-          add_sub_job(config, job, sub_job.as(String | YHash))
+          abort "Invalid structure in #{job_config["depends_on"]}'s dependencies"
         end
       end
 
@@ -83,9 +86,9 @@ module Neph
       end
 
       if sub_job.has_key?("env")
-        add_sub_job(config, job, sub_job["job"].as(String), sub_job["env"].as(String))
+        add_sub_job(config, job, sub_job["job"].as_s, sub_job["env"].as_s)
       else
-        add_sub_job(config, job, sub_job["job"].as(String), nil)
+        add_sub_job(config, job, sub_job["job"].as_s, nil)
       end
     end
 

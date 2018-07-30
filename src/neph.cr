@@ -13,8 +13,8 @@ module Neph
 
   @quiet = false
 
-  alias YHash = Hash(YAML::Type, YAML::Type)
-  alias YArray = Array(YAML::Type)
+  alias YHash = Hash(YAML::Any, YAML::Any)
+  alias YArray = Array(YAML::Any)
 
   def neph_dir
     NEPH_DIR

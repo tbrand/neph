@@ -228,19 +228,22 @@ module Neph
       end
     end
 
+    #
+    # TODO: should be fixed
+    #
     def up_to_date? : Bool
       return false unless @src.size > 0
 
       @src.each do |source|
-        stat = File.stat(source)
+        stat = File.info(source)
 
         if File.exists?(tmp_file(source))
-          tmp_stat = File.stat(tmp_file(source))
-          if (stat.ctime > tmp_stat.atime)
+          tmp_stat = File.info(tmp_file(source))
+          if (stat.modification_time > tmp_stat.modification_time)
             return false
           end
         else
-          File.touch(tmp_file(source), stat.ctime)
+          File.touch(tmp_file(source), stat.modification_time)
           return false
         end
       end
