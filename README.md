@@ -1,5 +1,5 @@
 <h1 align="center">
-	<img src="https://user-images.githubusercontent.com/3483230/43591914-5c068eca-96af-11e8-9164-8df794ca0436.gif" />  
+	<img src="https://cloud.githubusercontent.com/assets/3483230/25774528/7bb488c4-32cb-11e7-9937-5ce61caea177.png" width="180" />  
 </h1>
 
 <p align="center">
@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/tbrand/neph/master/img/neph.gif" width="700" />
+	<img src="https://user-images.githubusercontent.com/3483230/43591914-5c068eca-96af-11e8-9164-8df794ca0436.gif" width="700" />
 </p>
 
 - A modern command line job processor written in Crystal :rocket:
