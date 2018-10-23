@@ -1,10 +1,10 @@
 
 err0:
-  command:
-    echo "OK"
+  commands:
+    - echo "OK"
   depends_on:
     err1
 
 err1:
-  command:
-    hogehoge
+  commands:
+    - hogehoge

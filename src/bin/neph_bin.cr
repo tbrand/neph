@@ -8,18 +8,19 @@ class NephBin
   CONFIG_PATH = "neph.yaml"
   @job_name : String = JOB_NAME
   @config_path : String = CONFIG_PATH
-  @mode : String = "AUTO"
+  @exec_mode : String = "parallel"
+  @log_mode : String = "AUTO"
 
   def initialize
     ready_dir
 
     parse_option!
 
-    if @mode == "AUTO"
+    if @log_mode == "AUTO"
       if STDOUT.tty?
-        @mode = "NORMAL"
+        @log_mode = "NORMAL"
       else
-        @mode = "CI"
+        @log_mode = "CI"
       end
     end
   end
@@ -42,7 +43,7 @@ class NephBin
           exit -1
         end
 
-        @mode = mode
+        @log_mode = mode
       end
 
       parser.on("-v", "--version", "Show the version") do
@@ -66,6 +67,10 @@ class NephBin
         exit 0
       end
 
+      parser.on("-s", "--seq", "Execute jobs sequentially. (Default is parallel.)") do
+        @exec_mode = "sequential"
+      end
+
       parser.unknown_args do |args|
         if args.size > 1
           log_ln "Only one job is supported yet."
@@ -83,7 +88,7 @@ class NephBin
   def exec
     main_job = parse_yaml(@job_name, @config_path)
 
-    job_executor = JobExecutor.new(main_job, @mode)
+    job_executor = JobExecutor.new(main_job, @exec_mode, @log_mode)
     job_executor.exec
   end
 

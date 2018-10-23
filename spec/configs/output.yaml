@@ -1,6 +1,6 @@
 output:
-  command:
-    echo "The result is $RESULT"
+  commands:
+    - echo "The result is $RESULT"
   depends_on:
     -
       job: run_crystal
@@ -9,13 +9,13 @@ output:
     - just_echo
 
 run_crystal:
-  command:
-    crystal eval "puts 1 + 3"
+  commands:
+    - crystal eval "puts 1 + 3"
 
 just_echo:
-  command:
-    echo "I'm echo"
+  commands:
+    - echo "I'm echo"
 
 just_echo2:
-  command:
-    echo "I'm second echo"
+  commands:
+    - echo "I'm second echo"

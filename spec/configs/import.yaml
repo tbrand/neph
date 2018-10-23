@@ -3,13 +3,13 @@ import:
   - spec/configs/imported1.yaml
 
 import_main:
-  command:
-    echo "OK from import_main"
+  commands:
+    - echo "OK from import_main"
   depends_on:
     - imported0
     - imported1
     - import0
 
 import0:
-  command:
-    echo "OK from import0"
+  commands:
+    - echo "OK from import0"

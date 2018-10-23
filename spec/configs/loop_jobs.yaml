@@ -1,6 +1,6 @@
 loop0:
-  command:
-    pwd
+  commands:
+    - pwd
   depends_on:
     loop1
 

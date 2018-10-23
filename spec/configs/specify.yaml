@@ -1,10 +1,10 @@
 
 specify0:
-  command:
-    echo "OK"
+  commands:
+    - echo "OK"
   depends_on:
     specify1
 
 specify1:
-  command:
-    echo "OK"
+  commands:
+    - echo "OK"
