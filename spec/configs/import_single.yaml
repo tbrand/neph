@@ -2,7 +2,7 @@ import:
   spec/configs/imported_single.yaml
 
 import_single:
-  command:
-    echo "OK from import_single"
+  commands:
+    - echo "OK from import_single"
   depends_on:
     imported_single

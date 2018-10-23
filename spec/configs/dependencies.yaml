@@ -1,16 +1,16 @@
 
 job0:
-  command:
-    echo "job0"
+  commands:
+    - echo "job0"
   depends_on:
     job1
 
 job1:
-  command:
-    echo "job1"
+  commands:
+    - echo "job1"
   depends_on:
     job2
 
 job2:
-  command:
-    echo "job2"
+  commands:
+    - echo "job2"

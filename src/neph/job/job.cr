@@ -8,7 +8,6 @@ module Neph
     SKIP       = 4
 
     getter name : String
-    getter command : String
     getter ws_dir : String
     getter log_dir : String
     getter tmp_dir : String
@@ -18,6 +17,8 @@ module Neph
     getter current_command : String = ""
     getter done_command : Int32 = 0
     getter commands : Array(String) = [] of String
+    getter before : Array(String) = [] of String
+    getter after : Array(String) = [] of String
 
     property env : String?
     property dir : String = Dir.current
@@ -25,7 +26,13 @@ module Neph
     property ignore_error : Bool = false
     property hide : Bool = false
 
-    def initialize(@name : String, @command : String, @parent_job : Job?)
+    def initialize(
+         @name       : String,
+         @commands   : Array(String),
+         @before     : Array(String),
+         @after      : Array(String),
+         @parent_job : Job?
+       )
       @depends_on = [] of Job
       @ws_dir = "#{neph_dir}/#{@name}"
       @log_dir = "#{@ws_dir}/log"
@@ -35,10 +42,6 @@ module Neph
       @prev_status = -1
       @prev_command = ""
       @elapsed_time = ""
-
-      @commands = @command.split("\n").reject do |command|
-        command.empty?
-      end unless @command.empty?
     end
 
     def add_sub_job(job : Job, env : String?)
@@ -184,9 +187,18 @@ module Neph
       end
     end
 
-    def exec(channel : Channel(Job))
+    def exec(channel : Channel(Nil)? = nil)
       @status = WAITING
-      exec_sub_job if @depends_on.size > 0
+
+      if @depends_on.size > 0
+        if channel.nil?
+          # Sequential execution mode
+          exec_sub_job_sequential
+        else
+          # Parallel execution mode
+          exec_sub_job_parallel
+        end
+      end
 
       create_dir
 
@@ -219,7 +231,7 @@ module Neph
         end
       end
 
-      channel.send(self)
+      channel.not_nil!.send(nil) if channel
     end
 
     def clean_tmp
@@ -260,8 +272,41 @@ module Neph
 
       s = Time.now
 
-      unless @commands.size == 0
-        @commands.each do |command|
+      exec_commands(@before, stdout, stderr)
+      exec_commands(@commands, stdout, stderr)
+      exec_commands(@after, stdout, stderr)
+
+      @done_command += 1
+
+      e = Time.now
+      @elapsed_time = format_time(e - s)
+      stdout.close
+      stderr.close
+    end
+
+    def exec_sub_job_sequential
+      depends_on.each do |sub_job|
+        sub_job.exec
+      end
+    end
+
+    def exec_sub_job_parallel
+      channel = Channel(Nil).new
+
+      depends_on.each do |sub_job|
+        spawn do
+          sub_job.exec(channel)
+        end
+      end
+
+      depends_on.each do |_|
+        channel.receive
+      end
+    end
+
+    def exec_commands(commands : Array(String), stdout, stderr)
+      unless commands.size == 0
+        commands.each do |command|
           next if command.empty?
 
           @current_command = command
@@ -279,26 +324,7 @@ module Neph
             break
           end
         end
-      end
-
-      e = Time.now
-      @elapsed_time = format_time(e - s)
-      stdout.close
-      stderr.close
-    end
-
-    def exec_sub_job
-      channel = Channel(Job).new
-
-      depends_on.each do |sub_job|
-        spawn do
-          sub_job.exec(channel)
-        end
-      end
-
-      depends_on.each do |_|
-        channel.receive
-      end
+      end      
     end
 
     def file_tail(path : String) : String

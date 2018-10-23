@@ -1,15 +1,36 @@
 module Neph
   class JobExecutor
-    def initialize(@job : Job, @mode : String); end
+    def initialize(@job : Job, @exec_mode : String, @log_mode : String); end
 
     def exec
-      channel = Channel(Job).new
+      case @exec_mode
+      when "parallel"
+        exec_parallel
+      when "sequential"
+        exec_sequential
+      else
+        puts "Unknown execution mode: #{@exec_mode}"
+        exit -1
+      end
+
+      print_status
+    end
+
+    def exec_parallel
+      channel = Channel(Nil).new
       @start = Time.now
 
       spawn do
         @job.exec(channel)
+      end      
+    end
+
+    def exec_sequential
+      @start = Time.now
+
+      spawn do
+        @job.exec
       end
-      print_status
     end
 
     def banner : String
@@ -40,7 +61,7 @@ module Neph
     end
 
     def print_status
-      case @mode
+      case @log_mode
       when "NORMAL"
         print_status_normal
       when "CI"

@@ -1,5 +1,5 @@
 same:
-  command:
-    pwd
+  commands:
+    - pwd
   depends_on:
     same

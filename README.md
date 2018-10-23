@@ -15,8 +15,8 @@
 </p>
 
 - A modern command line job processor written in Crystal :rocket:
-- Can execute jobs concurrently. :rocket:
-- Can be substitute for `make` command. :rocket:
+- Parallel job execution. :rocket:
+- Use like `make` command. :rocket:
 
 ## Installation
 

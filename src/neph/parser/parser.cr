@@ -34,13 +34,23 @@ module Neph
       end
 
       job_config = config[job_name].as_h
-      job_command = if job_config.has_key?("command")
-                      job_config["command"].as_s
+      job_commands = if job_config.has_key?("commands")
+                      job_config["commands"].as_a.map { |c| c.as_s }
                     else
-                      ""
-                    end
+                      [] of String
+                     end
+      job_before = if job_config.has_key?("before")
+                     job_config["before"].as_a.map { |c| c.as_s }
+                   else
+                     [] of String
+                   end
+      job_after = if job_config.has_key?("after")
+                     job_config["after"].as_a.map { |c| c.as_s }
+                   else
+                     [] of String
+                   end
 
-      job = Job.new(job_name, job_command, parent_job)
+      job = Job.new(job_name, job_commands, job_before, job_after, parent_job)
       job.dir = job_config["dir"].as_s if job_config.has_key?("dir")
       job.ignore_error = job_config["ignore_error"] ? true : false if job_config.has_key?("ignore_error")
       job.hide = job_config["hide"] ? true : false if job_config.has_key?("hide")
