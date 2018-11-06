@@ -1,0 +1,6 @@
+job0:
+  commands:
+    - echo "OK0"
+job1:
+  commands:
+    - echo "OK1"
