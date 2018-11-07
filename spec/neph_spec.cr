@@ -85,4 +85,10 @@ describe Neph do
     stdout_of("just_echo").should eq("I'm echo\n")
     stdout_of("just_echo2").should eq("I'm second echo\n")
   end
+
+  it "Execute multiple jobs" do
+    exec_neph("multiple_jobs.yaml", "job0 job1")
+    stdout_of("job0").should eq("OK0\n")
+    stdout_of("job1").should eq("OK1\n")
+  end
 end

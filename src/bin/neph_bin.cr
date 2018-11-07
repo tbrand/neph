@@ -4,9 +4,8 @@ require "colorize"
 require "../neph"
 
 class NephBin
-  JOB_NAME    = "main"
   CONFIG_PATH = "neph.yaml"
-  @job_name : String = JOB_NAME
+  @job_names : Array(String) = ["main"]
   @config_path : String = CONFIG_PATH
   @exec_mode : String = "parallel"
   @log_mode : String = "AUTO"
@@ -72,11 +71,7 @@ class NephBin
       end
 
       parser.unknown_args do |args|
-        if args.size > 1
-          log_ln "Only one job is supported yet."
-          exit 1
-        end
-        @job_name = args[0] if args[0]?
+        @job_names = args if args.size > 0
       end
     end
   end
@@ -86,7 +81,17 @@ class NephBin
   end
 
   def exec
-    main_job = parse_yaml(@job_name, @config_path)
+    main_job : Job = if @job_names.size == 1
+                       parse_yaml(@job_names[0], @config_path)
+                     else
+                       sub_jobs = @job_names.map { |j| parse_yaml(j, @config_path) }
+                       job_name = sub_jobs.map { |j| j.name }.join(", ")
+                       job = Job.new(job_name, [] of String, [] of String, [] of String, nil)
+                       sub_jobs.each do |s|
+                         job.add_sub_job(s, nil)
+                       end
+                       job
+                     end
 
     job_executor = JobExecutor.new(main_job, @exec_mode, @log_mode)
     job_executor.exec
