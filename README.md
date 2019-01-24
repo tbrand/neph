@@ -2,6 +2,8 @@
 	<img src="https://user-images.githubusercontent.com/3483230/43884788-ffc3fe84-9bf1-11e8-88c3-9f7fb6c0d419.png" width="180" />  
 </h1>
 
+<h1 align="center">neph</h1>
+
 <p align="center">
 	<a href="https://travis-ci.org/tbrand/neph"><img src="https://travis-ci.org/tbrand/neph.svg?branch=master&style=flat" alt="Latest version" /></a>
 	<a href="https://github.com/tbrand/neph/releases"><img src="https://img.shields.io/github/release/tbrand/neph.svg?style=flat" alt="Latest version" /></a>
