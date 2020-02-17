@@ -18,7 +18,7 @@ module Neph
 
     def exec_parallel
       channel = Channel(Nil).new
-      @start = Time.now
+      @start = Time.local
 
       spawn do
         @job.exec(channel)
@@ -26,7 +26,7 @@ module Neph
     end
 
     def exec_sequential
-      @start = Time.now
+      @start = Time.local
 
       spawn do
         @job.exec
@@ -120,7 +120,7 @@ module Neph
 
     def print_result
       if start = @start
-        elapsed_time = format_time(Time.now - @start.as(Time))
+        elapsed_time = format_time(Time.local - @start.as(Time))
         log_ln "\nFinished in #{elapsed_time}".colorize.mode(:bold).to_s
       end
     end

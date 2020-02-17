@@ -136,7 +136,7 @@ module Neph
     end
 
     def time_msg : String
-      time = Time.now.to_s("%Y-%m-%d %H:%S:%M")
+      time = Time.local.to_s("%Y-%m-%d %H:%S:%M")
       "[#{time}] "
     end
 
@@ -270,7 +270,7 @@ module Neph
       stdout = File.open("#{@log_dir}/#{log_out}", "w")
       stderr = File.open("#{@log_dir}/#{log_err}", "w")
 
-      s = Time.now
+      s = Time.local
 
       exec_commands(@before, stdout, stderr)
       exec_commands(@commands, stdout, stderr)
@@ -278,7 +278,7 @@ module Neph
 
       @done_command += 1
 
-      e = Time.now
+      e = Time.local
       @elapsed_time = format_time(e - s)
       stdout.close
       stderr.close
